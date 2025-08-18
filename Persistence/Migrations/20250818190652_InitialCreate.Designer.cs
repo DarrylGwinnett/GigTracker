@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250817175330_InitialCreate")]
+    [Migration("20250818190652_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -23,6 +23,10 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Gig", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Artist")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Category")
