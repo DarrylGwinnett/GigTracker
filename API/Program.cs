@@ -1,3 +1,4 @@
+using Application.Queries;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetGigList.Handler>());
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
