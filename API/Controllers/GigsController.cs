@@ -30,5 +30,12 @@ namespace API.Controllers
             await Mediator.Send(new EditGig.Command { Gig = gig });
             return NoContent();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteGigAsync(string id)
+        {
+            await Mediator.Send(new DeleteGig.Command { Id = id });
+            return NoContent();
+        }
     }
 }
