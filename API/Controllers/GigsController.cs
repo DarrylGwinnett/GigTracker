@@ -1,10 +1,7 @@
 using Application.Commands;
 using Application.Queries;
 using Domain;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace API.Controllers
 {
@@ -25,6 +22,13 @@ namespace API.Controllers
         public async Task<ActionResult<string>> CreateGigAsync(Gig gig)
         {
             return await Mediator.Send(new CreateGig.Command { Gig = gig });
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> EditGigAsync(Gig gig)
+        {
+            await Mediator.Send(new EditGig.Command { Gig = gig });
+            return NoContent();
         }
     }
 }
