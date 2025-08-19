@@ -1,3 +1,4 @@
+using Application.Commands;
 using Application.Queries;
 using Domain;
 using MediatR;
@@ -18,6 +19,12 @@ namespace API.Controllers
         public async Task<ActionResult<Gig>> GetGigDetail(string id)
         {
             return await Mediator.Send(new GetGigDetail.Query { Id = id });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<string>> CreateGigAsync(Gig gig)
+        {
+            return await Mediator.Send(new CreateGig.Command { Gig = gig });
         }
     }
 }
