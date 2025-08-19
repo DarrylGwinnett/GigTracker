@@ -1,7 +1,7 @@
+using Application.Core;
 using Application.Queries;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +9,11 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetGigList.Handler>());
+builder.Services.AddAutoMapper(config =>
+{
+    config.AddProfile<MappingProfiles>();
+}, typeof(MappingProfiles).Assembly);
+
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));

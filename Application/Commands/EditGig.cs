@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using AutoMapper;
+using Domain;
 using MediatR;
 using Persistence;
 namespace Application.Commands
@@ -10,12 +11,12 @@ namespace Application.Commands
             public required Gig Gig { get; set; }
         }
 
-        public class Handler(AppDbContext context) : IRequestHandler<Command>
+        public class Handler(AppDbContext context, IMapper mapper) : IRequestHandler<Command>
         {
             public async Task Handle(Command request, CancellationToken cancellationToken)
             {
                 var gigToUpdate = await context.Gigs.FindAsync([request.Gig.Id, cancellationToken]) ?? throw new KeyNotFoundException();
-                gigToUpdate = request.Gig;
+                mapper.Map(request.Gig, gigToUpdate);
                 await context.SaveChangesAsync(cancellationToken);
             }
         }
