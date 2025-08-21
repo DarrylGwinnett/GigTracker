@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Container, CssBaseline, List, ListItem, ListItemText } from "@mui/material";
+import { Container, CssBaseline } from "@mui/material";
 import axios from "axios";
 import NavBar from "./NavBar";
+import GigDashboard from "../../features/Gigs/Dashboard/GigDashboard";
 
 function App() {
   const [gigs, setGigs] = useState<Gig[]>([]);
@@ -13,16 +14,11 @@ function App() {
   }, []);
   return (
     <>
-    <CssBaseline/>
+      <CssBaseline />
       <NavBar />
-      <Container maxWidth='xl' sx={{mt: 3, ml: 3}}>
-      <List>
-        {gigs.map((gig) => (
-          <ListItem key={gig.id}>
-            <ListItemText>{gig.title}</ListItemText>
-          </ListItem>
-        ))}
-      </List>
+      <Container maxWidth="xl" sx={{ mt: 3, ml: 3 }}>
+<GigDashboard gigs={gigs}/>
+
       </Container>
     </>
   );
