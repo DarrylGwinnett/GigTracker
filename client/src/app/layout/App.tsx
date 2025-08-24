@@ -1,22 +1,16 @@
-import { useEffect, useState } from "react";
-import { Container, CssBaseline } from "@mui/material";
-import axios from "axios";
+import { useState } from "react";
+import { Box, Container, CssBaseline, Typography } from "@mui/material";
 import NavBar from "./NavBar";
 import GigDashboard from "../../features/Gigs/Dashboard/GigDashboard";
+import { useGigs } from "../../lib/hooks/useGigs";
 
 function App() {
-  const [gigs, setGigs] = useState<Gig[]>([]);
   const [selectedGig, setSelectedGig] = useState<Gig | undefined>(undefined);
   const [editMode, setEditMode] = useState(false);
-
-  useEffect(() => {
-    axios
-      .get<Gig[]>("https://localhost:5001/api/gigs")
-      .then((response) => setGigs(response.data));
-  }, []);
+  const { gigs, isPending } = useGigs();
 
   const handleSelectGig = (id: string) => {
-    setSelectedGig(gigs.find((x) => x.id === id));
+    setSelectedGig(gigs!.find((x) => x.id === id));
   };
 
   const handleCancelSelectGig = () => {
@@ -34,42 +28,43 @@ function App() {
   };
 
   const handleSubmitForm = (gig: Gig) => {
-    if (gig.id) {
-      setGigs(gigs.map((x) => (x.id === gig.id ? gig : x)));
+    /*if (gig.id) {
+      setGigs(gigs!.map((x) => (x.id === gig.id ? gig : x)));
     } else {
-      gig.id = gigs.length.toString();
+      gig.id = gigs!.length.toString();
       setSelectedGig(gig);
-      setGigs([...gigs, gig]);
-    }
+      setGigs([...gigs!, gig]);
+    }*/
+    console.log(gig);
     setEditMode(false);
   };
 
   const handleDelete = (id: string) => {
-    setGigs(gigs.filter((x) => x.id !== id));
-    setEditMode(false);
-    if (selectedGig?.id === id) {
-      setSelectedGig(undefined);
-    }
+    console.log(id);
   };
 
   return (
-    <>
+    <Box sx={{ bgcolor: "#eeeeee", minHeight: "100vh" }}>
       <CssBaseline />
       <NavBar openForm={handleOpenForm} />
       <Container maxWidth="xl" sx={{ mt: 3, ml: 3 }}>
-        <GigDashboard
-          gigs={gigs}
-          selectGig={handleSelectGig}
-          cancelSelectGig={handleCancelSelectGig}
-          selectedGig={selectedGig}
-          editMode={editMode}
-          openForm={handleOpenForm}
-          closeForm={handleFormClose}
-          submitForm={handleSubmitForm}
-          deleteGig={handleDelete}
-        />
+        {!gigs || isPending ? (
+          <Typography>Loading...</Typography>
+        ) : (
+          <GigDashboard
+            gigs={gigs}
+            selectGig={handleSelectGig}
+            cancelSelectGig={handleCancelSelectGig}
+            selectedGig={selectedGig}
+            editMode={editMode}
+            openForm={handleOpenForm}
+            closeForm={handleFormClose}
+            submitForm={handleSubmitForm}
+            deleteGig={handleDelete}
+          />
+        )}
       </Container>
-    </>
+    </Box>
   );
 }
 
