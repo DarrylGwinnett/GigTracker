@@ -9,9 +9,10 @@ import {
 
 type Props = {
   gig: Gig;
+  cancelSelectGig: () => void
 };
 
-export default function GigDetails({ gig }: Props) {
+export default function GigDetails({ gig, cancelSelectGig }: Props) {
   return (
     <Card sx={{ borderRadius: 3 }}>
       <CardMedia
@@ -26,7 +27,7 @@ export default function GigDetails({ gig }: Props) {
       </CardContent>
       <CardActions>
         <Button color="primary">Edit</Button>
-        <Button color="inherit">Cancel</Button>
+        <Button color="inherit" onClick={cancelSelectGig}>Cancel</Button>
       </CardActions>
     </Card>
   );

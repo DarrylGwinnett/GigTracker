@@ -9,9 +9,10 @@ import {
 
 type Props = {
   gig: Gig;
+  selectGig: (id: string) => void
 };
 
-export default function GigCard({ gig }: Props) {
+export default function GigCard({ gig, selectGig }: Props) {
   return (
     <Card sx={{ borderRadius: 3 }}>
       <CardContent>
@@ -29,7 +30,7 @@ export default function GigCard({ gig }: Props) {
         sx={{ display: "flex", justifyContent: "space-between, pb:2" }}
       >
         <Chip label={gig.category} variant="outlined"></Chip>
-        <Button size="medium" variant="contained">
+        <Button size="medium" variant="contained" onClick={() =>selectGig(gig.id)}>
           View
         </Button>
       </CardActions>
