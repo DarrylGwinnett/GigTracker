@@ -9,7 +9,11 @@ import {
   Typography,
 } from "@mui/material";
 
-export default function NavBar() {
+type Props = {
+  openForm: () => void
+}
+
+export default function NavBar({openForm}: Props) {
   return (
     <Box sx={{ flexGrow: 2 }}>
       <AppBar
@@ -50,7 +54,7 @@ export default function NavBar() {
                 Contact
               </MenuItem>
             </Box>
-            <Button size="large" variant="contained" color="success">
+            <Button size="large" variant="contained" color="success" onClick={(openForm)}>
               Create Gig
             </Button>
           </Toolbar>

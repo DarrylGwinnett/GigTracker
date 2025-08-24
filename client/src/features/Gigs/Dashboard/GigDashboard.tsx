@@ -8,6 +8,11 @@ type Props = {
   selectGig: (id: string) => void;
   cancelSelectGig: () => void;
   selectedGig?: Gig;
+  editMode: boolean
+  openForm: (id: string) => void;
+  closeForm: () => void
+  submitForm: (gig: Gig) => void
+  deleteGig: (id: string) => void
 };
 
 export default function GigDashboard({
@@ -15,17 +20,22 @@ export default function GigDashboard({
   selectGig,
   cancelSelectGig,
   selectedGig,
+  editMode,
+  openForm,
+  closeForm,
+  submitForm,
+  deleteGig
 }: Props) {
   return (
     <Grid2 container>
       <Grid2 size={7}>
-        <GigList gigs={gigs} selectGig={selectGig} />
+        <GigList gigs={gigs} selectGig={selectGig} deleteGig={deleteGig}/>
       </Grid2>
       <Grid2 size={5}>
-        {selectedGig && (
-          <GigDetails gig={selectedGig} cancelSelectGig={cancelSelectGig} />
+        {selectedGig && !editMode && (
+          <GigDetails gig={selectedGig} cancelSelectGig={cancelSelectGig} openForm={openForm}  />
         )}
-        <GigForm/>
+        {editMode &&<GigForm closeForm={closeForm} gig={selectedGig} submitForm={submitForm}/>}
       </Grid2>
     </Grid2>
   );

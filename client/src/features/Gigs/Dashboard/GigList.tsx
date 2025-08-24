@@ -4,13 +4,14 @@ import GigCard from "./GigCard";
 type Props = {
   gigs: Gig[];
   selectGig: (id: string) => void
+  deleteGig: (id: string) => void
 };
 
-export default function GigList({ gigs, selectGig }: Props) {
+export default function GigList({ gigs, selectGig, deleteGig }: Props) {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       {gigs.map((gig) => (
-        <GigCard key={gig.id} gig={gig}  selectGig={selectGig} />
+        <GigCard key={gig.id} gig={gig}  selectGig={selectGig} deleteGig={deleteGig}/>
       ))}
     </Box>
   );

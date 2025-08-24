@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -9,10 +10,11 @@ import {
 
 type Props = {
   gig: Gig;
-  selectGig: (id: string) => void
+  selectGig: (id: string) => void;
+  deleteGig: (id: string) => void;
 };
 
-export default function GigCard({ gig, selectGig }: Props) {
+export default function GigCard({ gig, selectGig, deleteGig }: Props) {
   return (
     <Card sx={{ borderRadius: 3 }}>
       <CardContent>
@@ -27,12 +29,26 @@ export default function GigCard({ gig, selectGig }: Props) {
         <Typography sx={{ color: "text.secondary" }}> {gig.venue}</Typography>
       </CardContent>
       <CardActions
-        sx={{ display: "flex", justifyContent: "space-between, pb:2" }}
+        sx={{ display: "flex", justifyContent: "space-between", pb: 2 }}
       >
         <Chip label={gig.category} variant="outlined"></Chip>
-        <Button size="medium" variant="contained" onClick={() =>selectGig(gig.id)}>
-          View
-        </Button>
+        <Box display='flex' gap={3}>
+          <Button
+            size="medium"
+            variant="contained"
+            onClick={() => selectGig(gig.id)}
+          >
+            View
+          </Button>
+          <Button
+            size="medium"
+            variant="contained"
+            color="error"
+            onClick={() => deleteGig(gig.id)}
+          >
+            Delete
+          </Button>
+        </Box>
       </CardActions>
     </Card>
   );
