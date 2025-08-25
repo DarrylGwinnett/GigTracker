@@ -25,23 +25,10 @@ function App() {
 
   const handleFormClose = () => {
     setEditMode(false);
+    setSelectedGig(selectedGig)
   };
 
-  const handleSubmitForm = (gig: Gig) => {
-    /*if (gig.id) {
-      setGigs(gigs!.map((x) => (x.id === gig.id ? gig : x)));
-    } else {
-      gig.id = gigs!.length.toString();
-      setSelectedGig(gig);
-      setGigs([...gigs!, gig]);
-    }*/
-    console.log(gig);
-    setEditMode(false);
-  };
 
-  const handleDelete = (id: string) => {
-    console.log(id);
-  };
 
   return (
     <Box sx={{ bgcolor: "#eeeeee", minHeight: "100vh" }}>
@@ -59,8 +46,6 @@ function App() {
             editMode={editMode}
             openForm={handleOpenForm}
             closeForm={handleFormClose}
-            submitForm={handleSubmitForm}
-            deleteGig={handleDelete}
           />
         )}
       </Container>

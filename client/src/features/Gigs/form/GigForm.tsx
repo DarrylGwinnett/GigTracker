@@ -1,14 +1,15 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import type { FormEvent } from "react";
+import { useGigs } from "../../../lib/hooks/useGigs";
 
 type Props = {
   closeForm: () => void;
   gig?: Gig;
-  submitForm: (gig: Gig) => void
 };
 
-export default function GigForm({ closeForm, gig, submitForm }: Props) {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+export default function GigForm({ closeForm, gig }: Props) {
+  const { updateGig, createGig } = useGigs();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -17,8 +18,15 @@ export default function GigForm({ closeForm, gig, submitForm }: Props) {
       data[key] = value;
     });
 
-    if(gig) data.id = gig.id
-    submitForm(data as unknown as Gig)
+    if (gig) {
+      data.id = gig.id;
+      await updateGig.mutateAsync(data as unknown as Gig);
+      closeForm();
+    }
+    else{
+      await createGig.mutateAsync(data as unknown as Gig)
+      closeForm()
+    }
   };
 
   return (
@@ -39,6 +47,7 @@ export default function GigForm({ closeForm, gig, submitForm }: Props) {
           label="Category"
           defaultValue={gig?.category}
         />
+        <TextField name="artist" label="Artist" defaultValue={gig?.artist} />
         <TextField
           name="description"
           label="Description"
@@ -49,8 +58,11 @@ export default function GigForm({ closeForm, gig, submitForm }: Props) {
         <TextField
           name="date"
           label="Date"
-          type="datetime-local"
-          defaultValue={gig?.date}
+          type="date"
+          defaultValue={gig?.date ?
+            new Date(gig.date).toISOString().split('T')[0] 
+            : new Date().toISOString().split('T')[0]
+          }
         />
         <TextField name="city" label="City" defaultValue={gig?.city} />
         <TextField name="venue" label="Venue" defaultValue={gig?.venue} />
@@ -58,7 +70,12 @@ export default function GigForm({ closeForm, gig, submitForm }: Props) {
           <Button color="inherit" onClick={closeForm}>
             Cancel
           </Button>
-          <Button color="success" variant="contained" type="submit">
+          <Button
+            color="success"
+            variant="contained"
+            type="submit"
+            disabled={updateGig.isPending}
+          >
             Submit
           </Button>
         </Box>

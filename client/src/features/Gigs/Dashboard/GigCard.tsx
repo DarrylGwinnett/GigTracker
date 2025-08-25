@@ -7,14 +7,16 @@ import {
   Chip,
   Typography,
 } from "@mui/material";
+import { useGigs } from "../../../lib/hooks/useGigs";
 
 type Props = {
   gig: Gig;
   selectGig: (id: string) => void;
-  deleteGig: (id: string) => void;
 };
 
-export default function GigCard({ gig, selectGig, deleteGig }: Props) {
+export default function GigCard({ gig, selectGig }: Props) {
+ const { deleteGig } = useGigs();
+
   return (
     <Card sx={{ borderRadius: 3 }}>
       <CardContent>
@@ -44,7 +46,8 @@ export default function GigCard({ gig, selectGig, deleteGig }: Props) {
             size="medium"
             variant="contained"
             color="error"
-            onClick={() => deleteGig(gig.id)}
+            onClick={async () => await deleteGig.mutateAsync(gig.id)}
+            disabled={deleteGig.isPending}
           >
             Delete
           </Button>
