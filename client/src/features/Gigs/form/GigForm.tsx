@@ -2,13 +2,11 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import type { FormEvent } from "react";
 import { useGigs } from "../../../lib/hooks/useGigs";
 
-type Props = {
-  closeForm: () => void;
-  gig?: Gig;
-};
 
-export default function GigForm({ closeForm, gig }: Props) {
+
+export default function GigForm() {
   const { updateGig, createGig } = useGigs();
+  const gig = {} as Gig;
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -21,11 +19,9 @@ export default function GigForm({ closeForm, gig }: Props) {
     if (gig) {
       data.id = gig.id;
       await updateGig.mutateAsync(data as unknown as Gig);
-      closeForm();
     }
     else{
       await createGig.mutateAsync(data as unknown as Gig)
-      closeForm()
     }
   };
 
@@ -67,7 +63,7 @@ export default function GigForm({ closeForm, gig }: Props) {
         <TextField name="city" label="City" defaultValue={gig?.city} />
         <TextField name="venue" label="Venue" defaultValue={gig?.venue} />
         <Box display="flex" justifyContent={"end"} gap={3}>
-          <Button color="inherit" onClick={closeForm}>
+          <Button color="inherit" >
             Cancel
           </Button>
           <Button

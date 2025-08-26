@@ -1,37 +1,18 @@
-import { Grid2 } from "@mui/material";
-import GigList from "./GigList";
-import GigDetails from "../Details/GigDetails";
-import GigForm from "../form/GigForm";
+import { Grid2, Typography } from "@mui/material";
+import GigList from './GigList.tsx'
+import { useGigs } from "../../../lib/hooks/useGigs";
 
-type Props = {
-  gigs: Gig[];
-  selectGig: (id: string) => void;
-  cancelSelectGig: () => void;
-  selectedGig?: Gig;
-  editMode: boolean
-  openForm: (id: string) => void;
-  closeForm: () => void
-};
 
-export default function GigDashboard({
-  gigs,
-  selectGig,
-  cancelSelectGig,
-  selectedGig,
-  editMode,
-  openForm,
-  closeForm
-}: Props) {
+export default function GigDashboard() {
+  const { gigs, isPending } = useGigs();
+  if(!gigs || isPending) return <Typography>Loading...</Typography>
   return (
     <Grid2 container>
       <Grid2 size={7}>
-        <GigList gigs={gigs} selectGig={selectGig}/>
+        <GigList />
       </Grid2>
+      Gig Filter
       <Grid2 size={5}>
-        {selectedGig && !editMode && (
-          <GigDetails selectedGig={selectedGig} cancelSelectGig={cancelSelectGig} openForm={openForm}  />
-        )}
-        {editMode &&<GigForm closeForm={closeForm} gig={selectedGig}/>}
       </Grid2>
     </Grid2>
   );

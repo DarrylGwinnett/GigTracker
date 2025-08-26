@@ -11,10 +11,9 @@ import { useGigs } from "../../../lib/hooks/useGigs";
 
 type Props = {
   gig: Gig;
-  selectGig: (id: string) => void;
 };
 
-export default function GigCard({ gig, selectGig }: Props) {
+export default function GigCard({ gig }: Props) {
  const { deleteGig } = useGigs();
 
   return (
@@ -38,7 +37,7 @@ export default function GigCard({ gig, selectGig }: Props) {
           <Button
             size="medium"
             variant="contained"
-            onClick={() => selectGig(gig.id)}
+            onClick={() => {}}
           >
             View
           </Button>
