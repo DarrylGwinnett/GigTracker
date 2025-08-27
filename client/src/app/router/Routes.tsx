@@ -3,6 +3,7 @@ import App from "../layout/App";
 import HomePage from "../../features/home/HomePage";
 import GigDashboard from "../../features/gigs/Dashboard/GigDashboard";
 import GigForm from "../../features/gigs/form/GigForm";
+import GigDetails from "../../features/gigs/details/GigDetails";
 
 export const router = createBrowserRouter([
     {
@@ -12,6 +13,7 @@ export const router = createBrowserRouter([
             { path: '', element:<HomePage/> },
             { path: 'gigs', element:<GigDashboard/> },
             { path: 'createGig', element:<GigForm/> },
+            { path: 'gigs/:id', element:<GigDetails/> },
         ]
     }
 ])

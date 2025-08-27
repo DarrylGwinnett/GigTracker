@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useGigs } from "../../../lib/hooks/useGigs";
+import { Link } from "react-router";
 
 type Props = {
   gig: Gig;
@@ -35,6 +36,7 @@ export default function GigCard({ gig }: Props) {
         <Chip label={gig.category} variant="outlined"></Chip>
         <Box display='flex' gap={3}>
           <Button
+          component={Link} to={`/gigs/${gig.id}`}
             size="medium"
             variant="contained"
             onClick={() => {}}
