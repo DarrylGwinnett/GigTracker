@@ -12,7 +12,8 @@ export const router = createBrowserRouter([
         children:[
             { path: '', element:<HomePage/> },
             { path: 'gigs', element:<GigDashboard/> },
-            { path: 'createGig', element:<GigForm/> },
+            { path: 'createGig', element:<GigForm key='create'/> },
+            { path: 'manage/:id', element:<GigForm key='edit'/> },
             { path: 'gigs/:id', element:<GigDetails/> },
         ]
     }

@@ -39,7 +39,8 @@ export const useGigs = (id?: string) => {
 
     const createGig = useMutation({
         mutationFn: async (gig: Gig) => {
-            await agent.post('/gigs', gig)
+            const response = await agent.post('/gigs', gig)
+            return response.data
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['gigs'] })

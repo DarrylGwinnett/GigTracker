@@ -30,7 +30,7 @@ export default function GigDetails() {
         <Typography>{gig.description}</Typography>
       </CardContent>
       <CardActions>
-        <Button color="primary" onClick={() => navigate(`/gigs/${gig.id}`)}>
+        <Button color="primary" onClick={() => navigate(`/manage/${gig.id}`)}>
           Edit
         </Button>
         <Button color="inherit" onClick={() => navigate("/gigs")}>

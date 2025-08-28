@@ -1,12 +1,12 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import type { FormEvent } from "react";
 import { useGigs } from "../../../lib/hooks/useGigs";
-
-
+import { useNavigate, useParams } from "react-router";
 
 export default function GigForm() {
-  const { updateGig, createGig } = useGigs();
-  const gig = {} as Gig;
+  const { id } = useParams();
+  const { updateGig, createGig, gig, isLoadingGig } = useGigs(id);
+  const navigate = useNavigate();
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -19,16 +19,21 @@ export default function GigForm() {
     if (gig) {
       data.id = gig.id;
       await updateGig.mutateAsync(data as unknown as Gig);
-    }
-    else{
-      await createGig.mutateAsync(data as unknown as Gig)
+      navigate(`/gigs/${gig.id}`);
+    } else {
+      createGig.mutate(data as unknown as Gig, {
+        onSuccess: (id) => {
+          navigate(`/gigs/${id}`);
+        },
+      });
     }
   };
 
+  if (isLoadingGig) return <Typography>Loading gig...</Typography>;
   return (
     <Paper sx={{ borderRadius: 3, padding: 3 }}>
       <Typography variant="h5" gutterBottom color="primary">
-        Create Activity
+        {gig ? 'Edit Gig' : 'Create Gig'}
       </Typography>
       <Box
         component="form"
@@ -55,17 +60,16 @@ export default function GigForm() {
           name="date"
           label="Date"
           type="date"
-          defaultValue={gig?.date ?
-            new Date(gig.date).toISOString().split('T')[0] 
-            : new Date().toISOString().split('T')[0]
+          defaultValue={
+            gig?.date
+              ? new Date(gig.date).toISOString().split("T")[0]
+              : new Date().toISOString().split("T")[0]
           }
         />
         <TextField name="city" label="City" defaultValue={gig?.city} />
         <TextField name="venue" label="Venue" defaultValue={gig?.venue} />
         <Box display="flex" justifyContent={"end"} gap={3}>
-          <Button color="inherit" >
-            Cancel
-          </Button>
+          <Button color="inherit">Cancel</Button>
           <Button
             color="success"
             variant="contained"
