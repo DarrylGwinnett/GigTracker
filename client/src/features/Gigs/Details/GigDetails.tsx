@@ -6,40 +6,34 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
+import { useNavigate, useParams } from "react-router";
 import { useGigs } from "../../../lib/hooks/useGigs";
 
-type Props = {
-  selectedGig: Gig;
-  cancelSelectGig: () => void;
-  openForm: (id: string) => void;
-};
+export default function GigDetails() {
+  const { id } = useParams();
+  const { gig, isLoadingGig } = useGigs(id);
+  const navigate = useNavigate();
 
-export default function GigDetails({
-  selectedGig,
-  cancelSelectGig,
-  openForm,
-}: Props) {
-  const { gigs } = useGigs();
-  const gig = gigs?.find((x) => x.id === selectedGig.id);
-  console.log(gig?.title)
-  if (!gig) return <Typography>No gig found....</Typography>;
+  if (isLoadingGig) return <Typography>Loading...</Typography>;
+  if (!gig) return <Typography>No gig found...</Typography>;
+
   return (
     <Card sx={{ borderRadius: 3 }}>
       <CardMedia
         component="img"
-        src={`../images/categoryImages/${selectedGig.category}.jpg`}
+        src={`../images/categoryImages/${gig.category}.jpg`}
       />
       <CardContent>
-        <Typography variant="h5">{selectedGig.title}</Typography>
-        <Typography variant="h5">{selectedGig.artist}</Typography>
-        <Typography>{selectedGig.date}</Typography>
-        <Typography>{selectedGig.description}</Typography>
+        <Typography variant="h5">{gig.title}</Typography>
+        <Typography variant="h5">{gig.artist}</Typography>
+        <Typography>{gig.date}</Typography>
+        <Typography>{gig.description}</Typography>
       </CardContent>
       <CardActions>
-        <Button color="primary" onClick={() => openForm(selectedGig.id)}>
+        <Button color="primary" onClick={() => navigate(`/manage/${gig.id}`)}>
           Edit
         </Button>
-        <Button color="inherit" onClick={cancelSelectGig}>
+        <Button color="inherit" onClick={() => navigate("/gigs")}>
           Cancel
         </Button>
       </CardActions>
