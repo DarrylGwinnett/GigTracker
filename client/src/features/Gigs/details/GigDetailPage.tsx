@@ -15,8 +15,8 @@ export default function GigDetailPage() {
   return (
     <Grid2 container spacing={3}>
       <Grid2 size={8}>
-        <GigDetailsHeader />
-        <GigDetailsInfo />
+      <GigDetailsHeader gig={gig}/>
+        <GigDetailsInfo gig={gig}/>
         <GigDetailsChat />
       </Grid2>
       <Grid2 size={4}></Grid2>
