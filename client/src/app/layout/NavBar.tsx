@@ -3,9 +3,11 @@ import {
   AppBar,
   Box,
   Container,
+  MenuItem,
   Toolbar,
   Typography,
 } from "@mui/material";
+import { NavLink } from "react-router";
 import MenuItemLink from "./shared/MenuItemLink";
 
 export default function NavBar() {
@@ -15,34 +17,28 @@ export default function NavBar() {
         position="static"
         sx={{
           backgroundImage:
-            "linear-gradient(535deg, #402a43 0%, #218aee 9%, #9043ad 89%)",
+            "linear-gradient(135deg, #182a73 0%, #218ba3ff 69%, #20a7ac 89%)",
         }}
       >
         <Container maxWidth="xl">
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
-              <MenuItemLink
-                to="/"               
+              <MenuItem
+                component={NavLink}
+                to="/"
+                sx={{ display: "flex", gap: 2 }}
               >
                 <Group fontSize="large" />
                 <Typography variant="h4" fontWeight="bold">
                   GigTracker
                 </Typography>
-              </MenuItemLink>
+              </MenuItem>
             </Box>
 
             <Box sx={{ display: "flex" }}>
-              <MenuItemLink
-                to="/gigs"
-              >
-                Gigs
-              </MenuItemLink>
+              <MenuItemLink to="/gigs">Gigs</MenuItemLink>
             </Box>
-            <MenuItemLink
-              to="/createGig"
-            >
-              Create Gig
-            </MenuItemLink>
+            <MenuItemLink to="/createGig">Create Gig</MenuItemLink>
           </Toolbar>
         </Container>
       </AppBar>
