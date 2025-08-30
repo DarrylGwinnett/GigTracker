@@ -1,8 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
+import { useLocation } from "react-router";
 
 export const useGigs = (id?: string) => {
     const queryClient = useQueryClient()
+    const location = useLocation();
+
 
     const { data: gigs, isPending } = useQuery({
         queryKey: ["gigs"],
@@ -12,7 +15,8 @@ export const useGigs = (id?: string) => {
             );
             return response.data;
         },
-    });
+        enabled: !id && location.pathname === '/gigs'
+     });
 
     const { data: gig, isLoading: isLoadingGig } = useQuery({
         queryKey: ["gigs", id],
