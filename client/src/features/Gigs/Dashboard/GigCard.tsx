@@ -12,6 +12,7 @@ import {
 import { useGigs } from "../../../lib/hooks/useGigs";
 import { Link } from "react-router";
 import { AccessTime, Place } from "@mui/icons-material";
+import { formatDate } from "../../../lib/util/util";
 
 type Props = {
   gig: Gig;
@@ -54,8 +55,12 @@ export default function GigCard({ gig }: Props) {
       <Divider sx={{ mb: 3 }} />
       <CardContent sx={{ p: 0 }}>
         <Box display="flex" alignItems={"centre"} mb={2} px={2}>
-          <AccessTime sx={{ mr: 1 }} />
-          <Typography variant="body2">{gig.date}</Typography>
+          <Box display="flex" flexGrow={0} alignItems={"center"}>
+            <AccessTime sx={{ mr: 1 }} />
+            <Typography variant="body2" noWrap>
+            {formatDate(gig.date)}
+            </Typography>
+          </Box>
           <Place sx={{ ml: 3, mr: 1 }}></Place>
           <Typography variant="body2">{gig.venue}</Typography>
         </Box>
@@ -70,32 +75,28 @@ export default function GigCard({ gig }: Props) {
           <Typography variant="body1">Attendees go here</Typography>
         </Box>
       </CardContent>
-      <CardContent
-        sx={{ pb: 2 }}
-      >
-        <Typography variant='body2'>{gig.description}</Typography>
-          <Button
-            component={Link}
-            to={`/gigs/${gig.id}`}
-            size="medium"
-            variant="contained"
-            sx={{display:'flex', justifySelf:'self-end', br:3}}
-            onClick={() => {}}
-          >
-            View
-          </Button>
-          <Button
-            size="medium"
-            variant="contained"
-                        
-            color="error"
-            onClick={async () => await deleteGig.mutateAsync(gig.id)}
-            disabled={deleteGig.isPending}
-            
-            sx={{display:'flex', justifySelf:'self-end', br:3}}
-          >
-            Delete
-          </Button>
+      <CardContent sx={{ pb: 2 }}>
+        <Typography variant="body2">{gig.description}</Typography>
+        <Button
+          component={Link}
+          to={`/gigs/${gig.id}`}
+          size="medium"
+          variant="contained"
+          sx={{ display: "flex", justifySelf: "self-end", br: 3 }}
+          onClick={() => {}}
+        >
+          View
+        </Button>
+        <Button
+          size="medium"
+          variant="contained"
+          color="error"
+          onClick={async () => await deleteGig.mutateAsync(gig.id)}
+          disabled={deleteGig.isPending}
+          sx={{ display: "flex", justifySelf: "self-end", br: 3 }}
+        >
+          Delete
+        </Button>
       </CardContent>
     </Card>
   );

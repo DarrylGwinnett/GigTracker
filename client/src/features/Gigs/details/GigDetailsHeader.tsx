@@ -1,5 +1,6 @@
 import { Card, Badge, CardMedia, Box, Typography, Button } from "@mui/material";
 import { Link } from "react-router";
+import { formatDate } from "../../../lib/util/util";
 
 
 type Props = {
@@ -44,7 +45,7 @@ export default function GigDetailsHeader({gig} : Props) {
             <Box>
                 <Typography variant="h4" sx={{ fontWeight: 'bold' }}>{`${gig.artist} at ${gig.venue}`}</Typography>
                 <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{`Run for your lives tour`}</Typography>
-                <Typography variant="subtitle1">{gig.date}</Typography>
+                <Typography variant="subtitle1">{formatDate(gig.date)}</Typography>
                 <Typography variant="subtitle2">
                     Hosted by <Link to={`/profiles/username`} style={{ color: 'white', fontWeight: 'bold' }}>Bob</Link>
                 </Typography>

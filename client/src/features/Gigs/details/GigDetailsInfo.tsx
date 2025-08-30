@@ -1,6 +1,7 @@
 
 import { CalendarToday, Info, Place } from "@mui/icons-material";
 import { Divider, Grid2, Paper, Typography } from "@mui/material";
+import { formatDate } from "../../../lib/util/util";
 
 type Props = {
     gig: Gig;
@@ -24,7 +25,7 @@ export default function GigDetailsInfo({gig}: Props) {
                     <CalendarToday color="info" fontSize="large" />
                 </Grid2>
                 <Grid2 size={11}>
-                    <Typography>{gig.date}</Typography>
+                    <Typography>{formatDate(gig.date)}</Typography>
                 </Grid2>
             </Grid2>
             <Divider />
