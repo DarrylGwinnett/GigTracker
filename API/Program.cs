@@ -1,5 +1,7 @@
+using API.Middleware;
 using Application.Core;
 using Application.Queries;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 var builder = WebApplication.CreateBuilder(args);
@@ -8,16 +10,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetGigList.Handler>());
+builder.Services.AddMediatR(x => {
+    x.RegisterServicesFromAssemblyContaining<GetGigList.Handler>();
+    x.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+});
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile<MappingProfiles>();
 }, typeof(MappingProfiles).Assembly);
-
+builder.Services.AddValidatorsFromAssemblyContaining<GetGigList.Handler>();
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddTransient<ExceptionMiddleware>();
 builder.Services.AddCors();
 var app = builder.Build();
 
@@ -30,6 +36,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://localhost:3000"));
 app.MapControllers();
 

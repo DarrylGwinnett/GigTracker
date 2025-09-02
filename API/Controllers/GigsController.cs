@@ -1,4 +1,5 @@
 using Application.Commands;
+using Application.Gigs.DTO;
 using Application.Queries;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,9 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> CreateGigAsync(Gig gig)
+        public async Task<ActionResult<string>> CreateGigAsync(CreateGigDto gig)
         {
-            return await Mediator.Send(new CreateGig.Command { Gig = gig });
+            return await Mediator.Send(new CreateGig.Command { gigDto = gig });
         }
 
         [HttpPut]
