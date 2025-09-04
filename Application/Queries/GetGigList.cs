@@ -1,4 +1,5 @@
 using System;
+using Application.Core;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,13 +9,14 @@ namespace Application.Queries;
 
 public class GetGigList
 {
-    public class Query : IRequest<List<Gig>> { }
+    public class Query : IRequest<Result<List<Gig>>> { }
 
-    public class Handler(AppDbContext context) : IRequestHandler<Query, List<Gig>>
+    public class Handler(AppDbContext context) : IRequestHandler<Query, Result<List<Gig>>>
     {
-        public async Task<List<Gig>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<List<Gig>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            return await context.Gigs.ToListAsync(cancellationToken);
+            var gigs =  await context.Gigs.ToListAsync(cancellationToken);
+            return Result<List<Gig>>.Success(gigs);
         }
     }
 }
