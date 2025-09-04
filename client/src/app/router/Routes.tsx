@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import App from "../layout/App";
 import HomePage from "../../features/home/HomePage";
-import GigDashboard from "../../features/gigs/Dashboard/GigDashboard";
+import GigDashboard from "../../features/gigs/dashboard/GigDashboard";
 import GigForm from "../../features/gigs/form/GigForm";
 import GigDetailPage from "../../features/gigs/details/GigDetailPage";
 
