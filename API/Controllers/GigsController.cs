@@ -24,13 +24,13 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> CreateGigAsync(CreateGigDto gig)
         {
-            return HandleResult(await Mediator.Send(new CreateGig.Command { gigDto = gig }));
+            return HandleResult(await Mediator.Send(new CreateGig.Command { GigDto = gig }));
         }
 
         [HttpPut]
-        public async Task<ActionResult> EditGigAsync(Gig gig)
+        public async Task<ActionResult> EditGigAsync(EditGigDto gig)
         {
-            return HandleResult(await Mediator.Send(new EditGig.Command { Gig = gig }));
+            return HandleResult(await Mediator.Send(new EditGig.Command { GigDto = gig }));
         }
 
         [HttpDelete("{id}")]

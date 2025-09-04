@@ -10,6 +10,7 @@ namespace Application.Core
         {
             CreateMap<Gig, Gig>();
             CreateMap<CreateGigDto, Gig>();
+            CreateMap<EditGigDto, Gig>();
         }
     }
 }
