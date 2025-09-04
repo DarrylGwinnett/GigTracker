@@ -47,7 +47,7 @@ try
 {
     var context = services.GetRequiredService<AppDbContext>();
     await context.Database.MigrateAsync();
-    await Dbinitializer.SeedData(context);
+   // await Dbinitializer.SeedData(context);
 }
 catch (Exception ex)
 {
@@ -56,3 +56,5 @@ catch (Exception ex)
 }
 
 app.Run();
+
+public partial class Program { }
