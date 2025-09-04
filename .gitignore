@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 API/GigTracker.db-wal
 API/GigTracker.db-shm
+/API/GigTracker.db
