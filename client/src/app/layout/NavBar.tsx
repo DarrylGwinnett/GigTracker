@@ -44,6 +44,7 @@ export default function NavBar() {
               <MenuItemLink to="/gigs">Gigs</MenuItemLink>
             </Box>
             <MenuItemLink to="/createGig">Create Gig</MenuItemLink>
+            <MenuItemLink to="/errors">Error Handling</MenuItemLink>
           </Toolbar>
           <Observer>
             {() =>
