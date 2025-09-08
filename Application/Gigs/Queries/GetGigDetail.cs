@@ -5,7 +5,7 @@ using Domain;
 using MediatR;
 using Persistence;
 
-namespace Application.Queries;
+namespace Application.Gigs.Queries;
 
 public class GetGigDetail
 {

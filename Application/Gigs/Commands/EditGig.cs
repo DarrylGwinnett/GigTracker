@@ -4,7 +4,7 @@ using AutoMapper;
 using Domain;
 using MediatR;
 using Persistence;
-namespace Application.Commands
+namespace Application.Gigs.Commands
 {
     public class EditGig
     {

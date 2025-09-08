@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Queries;
+namespace Application.Gigs.Queries;
 
 public class GetGigList
 {
