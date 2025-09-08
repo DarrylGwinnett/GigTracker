@@ -12,7 +12,7 @@
 
         public required string Description { get; set; }
 
-        public required string Category { get; set; }
+        public required string Genre { get; set; }
 
         public required string City { get; set; }
 
