@@ -2,8 +2,10 @@ using API.Middleware;
 using Application.Core;
 using Application.Queries;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -24,6 +26,13 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddTransient<ExceptionMiddleware>();
+builder.Services.AddIdentityApiEndpoints<Domain.User>(opt =>
+{
+    opt.User.RequireUniqueEmail = true;
+})
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
 builder.Services.AddCors();
 var app = builder.Build();
 
@@ -31,14 +40,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://localhost:3000"));
 app.MapControllers();
+app.MapGroup("api").MapIdentityApi<Domain.User>();
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
@@ -47,7 +58,8 @@ try
 {
     var context = services.GetRequiredService<AppDbContext>();
     await context.Database.MigrateAsync();
-   // await Dbinitializer.SeedData(context);
+    var um = services.GetRequiredService<UserManager<Domain.User>>();
+    await Dbinitializer.SeedData(context, um);
 }
 catch (Exception ex)
 {
