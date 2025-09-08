@@ -9,17 +9,16 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { useGigs } from "../../../lib/hooks/useGigs";
 import { Link } from "react-router";
 import { AccessTime, Place } from "@mui/icons-material";
 import { formatDate } from "../../../lib/util/util";
+import type { Gig } from "../../../lib/types";
 
 type Props = {
   gig: Gig;
 };
 
 export default function GigCard({ gig }: Props) {
-  const { deleteGig } = useGigs();
   const isHost = false;
   const isGoing = false;
   const label = isHost ? "You Are Hosting" : "You are going";
@@ -82,21 +81,12 @@ export default function GigCard({ gig }: Props) {
           to={`/gigs/${gig.id}`}
           size="medium"
           variant="contained"
-          sx={{ display: "flex", justifySelf: "self-end", br: 3 }}
+          sx={{ display: "flex", justifySelf: "self-end", mt: 2, borderRadius: 3 }}
           onClick={() => {}}
         >
           View
         </Button>
-        <Button
-          size="medium"
-          variant="contained"
-          color="error"
-          onClick={async () => await deleteGig.mutateAsync(gig.id)}
-          disabled={deleteGig.isPending}
-          sx={{ display: "flex", justifySelf: "self-end", br: 3 }}
-        >
-          Delete
-        </Button>
+   
       </CardContent>
     </Card>
   );

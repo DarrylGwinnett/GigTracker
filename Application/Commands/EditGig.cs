@@ -17,7 +17,7 @@ namespace Application.Commands
         {
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var gigToUpdate = await context.Gigs.FindAsync([request.GigDto.Id, cancellationToken]) ?? throw new KeyNotFoundException();
+                var gigToUpdate = await context.Gigs.FindAsync([request.GigDto.Id, cancellationToken]);
                 if (gigToUpdate == null) return Result<Unit>.Failure("Gig not found", 404);
                 mapper.Map(request.GigDto, gigToUpdate);
                 var result = await context.SaveChangesAsync(cancellationToken);

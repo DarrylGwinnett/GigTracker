@@ -1,6 +1,7 @@
 import { Card, Badge, CardMedia, Box, Typography, Button } from "@mui/material";
 import { Link } from "react-router";
 import { formatDate } from "../../../lib/util/util";
+import type { Gig } from "../../../lib/types";
 
 
 type Props = {
@@ -25,8 +26,7 @@ export default function GigDetailsHeader({gig} : Props) {
         <CardMedia
             component="img"
             height="300"
-            image={`/images/categoryImages/${gig.category}.jpg`}
-            alt={`${gig.category} image`}
+            image={`/images/categoryImages/music.jpg`}
         />
         <Box sx={{
             position: 'absolute',
@@ -43,8 +43,8 @@ export default function GigDetailsHeader({gig} : Props) {
         }}>
             {/* Text Section */}
             <Box>
-                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>{`${gig.artist} at ${gig.venue}`}</Typography>
-                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{`Run for your lives tour`}</Typography>
+                <Typography variant="h3" sx={{ fontWeight: 'bold' }}>{gig.artist} in {gig.city}</Typography>
+                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>{gig.title}</Typography>
                 <Typography variant="subtitle1">{formatDate(gig.date)}</Typography>
                 <Typography variant="subtitle2">
                     Hosted by <Link to={`/profiles/username`} style={{ color: 'white', fontWeight: 'bold' }}>Bob</Link>
@@ -66,7 +66,7 @@ export default function GigDetailsHeader({gig} : Props) {
                             variant="contained"
                             color="primary"
                             component={Link}
-                            to={`/manage/activityId`}
+                            to={`/manage/${gig.id}`}
                             disabled={isCancelled}
                         >
                             Manage Event

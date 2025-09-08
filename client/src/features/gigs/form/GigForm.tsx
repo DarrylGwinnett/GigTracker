@@ -1,31 +1,61 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import type { FormEvent } from "react";
+import { Box, Button, Paper, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { useGigs } from "../../../lib/hooks/useGigs";
 import { useNavigate, useParams } from "react-router";
+import { useForm } from "react-hook-form";
+import { gigSchema, type GigSchema } from "../../../lib/schemas/gigSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import TextInput from "../../../app/layout/shared/TextInput";
+import SelectInput from "../../../app/layout/shared/SelectInput";
+import { genreOptions } from "./GenreOptions";
+import DateTimeInput from "../../../app/layout/shared/DateTimeInput";
+import LocationInput from "../../../app/layout/shared/LocationInput";
+import type { Gig } from "../../../lib/types";
 
 export default function GigForm() {
+  const { reset, handleSubmit, control } = useForm<GigSchema>({
+    resolver: zodResolver(gigSchema),
+    mode: "onTouched",
+  });
   const { id } = useParams();
-  const { updateGig, createGig, gig, isLoadingGig } = useGigs(id);
+  const { createGig, updateGig, gig, isLoadingGig } = useGigs(id);
   const navigate = useNavigate();
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
 
-    const data: { [key: string]: FormDataEntryValue } = {};
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
-
-    if (gig) {
-      data.id = gig.id;
-      await updateGig.mutateAsync(data as unknown as Gig);
-      navigate(`/gigs/${gig.id}`);
-    } else {
-      createGig.mutate(data as unknown as Gig, {
-        onSuccess: (id) => {
-          navigate(`/gigs/${id}`);
+  useEffect(() => {
+    if (gig)
+      reset({
+        ...gig,
+        location: {
+          city: gig.city,
+          venue: gig.venue,
+          latitude: gig.latitude,
+          longitude: gig.longitude,
         },
       });
+  }, [gig, reset]);
+
+  const onSubmit = async (data: GigSchema) => {
+    console.log(data);
+    const { location, ...rest } = data;
+    const flattenedData = {
+      ...rest,
+      ...location,
+    };
+    try {
+      if (gig) {
+        updateGig.mutate({ ...gig, ...flattenedData }, {
+          onSuccess: () =>  navigate(`/gigs/${gig.id}`)
+        })
+      }
+      else{
+        createGig.mutate(flattenedData as unknown as Gig, {
+          onSuccess: (id) =>  navigate(`/gigs/${id}`)
+        })
+      }
+      
+      ;      
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -33,41 +63,28 @@ export default function GigForm() {
   return (
     <Paper sx={{ borderRadius: 3, padding: 3 }}>
       <Typography variant="h5" gutterBottom color="primary">
-        {gig ? 'Edit Gig' : 'Create Gig'}
+        {gig ? "Edit Gig" : "Create Gig"}
       </Typography>
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         display="flex"
         flexDirection="column"
         gap={3}
       >
-        <TextField name="title" label="Title" defaultValue={gig?.title} />
-        <TextField
-          name="category"
-          label="Category"
-          defaultValue={gig?.category}
+        <TextInput<GigSchema> control={control} name="title" />
+        <Box display="flex" gap={3}>
+          <TextInput control={control} name="artist" />
+          <SelectInput control={control} name="genre" items={genreOptions} />
+        </Box>
+        <TextInput control={control} name="description" multiline rows={3} />
+
+        <DateTimeInput control={control} name="date" />
+        <LocationInput
+          control={control}
+          name="location"
+          label="Enter the location"
         />
-        <TextField name="artist" label="Artist" defaultValue={gig?.artist} />
-        <TextField
-          name="description"
-          label="Description"
-          multiline
-          rows="3"
-          defaultValue={gig?.description}
-        />
-        <TextField
-          name="date"
-          label="Date"
-          type="date"
-          defaultValue={
-            gig?.date
-              ? new Date(gig.date).toISOString().split("T")[0]
-              : new Date().toISOString().split("T")[0]
-          }
-        />
-        <TextField name="city" label="City" defaultValue={gig?.city} />
-        <TextField name="venue" label="Venue" defaultValue={gig?.venue} />
         <Box display="flex" justifyContent={"end"} gap={3}>
           <Button color="inherit">Cancel</Button>
           <Button
