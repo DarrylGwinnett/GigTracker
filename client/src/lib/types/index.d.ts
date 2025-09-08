@@ -2,7 +2,7 @@ interface Gig {
     id: string
     title: string
     artist: string
-    date: string
+    date: Date
     description: string
     genre: string
     city: string

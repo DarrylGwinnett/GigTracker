@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import TextInput from "../../../app/layout/shared/TextInput";
 import SelectInput from "../../../app/layout/shared/SelectInput";
 import { genreOptions } from "./GenreOptions";
+import DateTimeInput from "../../../app/layout/shared/DateTimeInput";
 
 export default function GigForm() {
   const {  reset, handleSubmit, control} = useForm<GigSchema>(
@@ -56,11 +57,11 @@ export default function GigForm() {
         flexDirection="column"
         gap={3}
       >
-        <TextInput control={control} name='title'/>
+        <TextInput<GigSchema> control={control} name='title'/>
         <TextInput control={control} name='artist'/>
         <SelectInput control={control} name='genre'  items={genreOptions}/>
         <TextInput control={control} name='description' multiline rows={3}/>
-        <TextInput control={control} name='date' type='date'/>        
+        <DateTimeInput control={control} name='date'/>        
         <TextInput control={control} name='venue'/>
         <TextInput control={control} name='city'/>
 

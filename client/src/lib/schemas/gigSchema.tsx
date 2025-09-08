@@ -10,7 +10,7 @@ export const gigSchema = z.object({
     genre: requiredString('Genre'),
     artist: requiredString('Artist'),
     description: requiredString('Description'),
-    date: requiredString('Date'),
+    date: z.coerce.date({message: 'Date is required'}) as unknown as Date,
     city: requiredString('City'),
     venue: requiredString('Venue'),
 
