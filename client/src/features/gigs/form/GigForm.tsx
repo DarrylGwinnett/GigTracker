@@ -1,14 +1,25 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import type { FormEvent } from "react";
+import { Box, Button, Paper, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { useGigs } from "../../../lib/hooks/useGigs";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
+import { useForm } from "react-hook-form";
+import { gigSchema, type GigSchema } from "../../../lib/schemas/gigSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import TextInput from "../../../app/layout/shared/TextInput";
 
 export default function GigForm() {
+  const {  reset, handleSubmit, control} = useForm<GigSchema>(
+    {resolver:zodResolver(gigSchema), mode: 'onTouched'});
   const { id } = useParams();
   const { updateGig, createGig, gig, isLoadingGig } = useGigs(id);
-  const navigate = useNavigate();
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+
+  useEffect(() => {
+    if(gig) reset(gig);
+    }, [gig, reset])
+
+  const onSubmit =  (data: GigSchema) => {
+    console.log(data);
+    /*event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
     const data: { [key: string]: FormDataEntryValue } = {};
@@ -27,6 +38,7 @@ export default function GigForm() {
         },
       });
     }
+      */
   };
 
   if (isLoadingGig) return <Typography>Loading gig...</Typography>;
@@ -37,37 +49,20 @@ export default function GigForm() {
       </Typography>
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         display="flex"
         flexDirection="column"
         gap={3}
       >
-        <TextField name="title" label="Title" defaultValue={gig?.title} />
-        <TextField
-          name="category"
-          label="Category"
-          defaultValue={gig?.category}
-        />
-        <TextField name="artist" label="Artist" defaultValue={gig?.artist} />
-        <TextField
-          name="description"
-          label="Description"
-          multiline
-          rows="3"
-          defaultValue={gig?.description}
-        />
-        <TextField
-          name="date"
-          label="Date"
-          type="date"
-          defaultValue={
-            gig?.date
-              ? new Date(gig.date).toISOString().split("T")[0]
-              : new Date().toISOString().split("T")[0]
-          }
-        />
-        <TextField name="city" label="City" defaultValue={gig?.city} />
-        <TextField name="venue" label="Venue" defaultValue={gig?.venue} />
+        <TextInput control={control} name='title'/>
+        <TextInput control={control} name='artist'/>
+        <TextInput control={control} name='category'/>
+        <TextInput control={control} name='description' multiline rows={3}/>
+        <TextInput control={control} name='date' type='date'/>        
+        <TextInput control={control} name='venue'/>
+        <TextInput control={control} name='city'/>
+
+
         <Box display="flex" justifyContent={"end"} gap={3}>
           <Button color="inherit">Cancel</Button>
           <Button

@@ -66,7 +66,7 @@ export default function GigDetailsHeader({gig} : Props) {
                             variant="contained"
                             color="primary"
                             component={Link}
-                            to={`/manage/activityId`}
+                            to={`/manage/${gig.id}`}
                             disabled={isCancelled}
                         >
                             Manage Event
