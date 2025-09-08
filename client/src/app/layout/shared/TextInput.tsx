@@ -14,6 +14,7 @@ const {field, fieldState} = useController({...props});
     {...props}
     {...field}
     fullWidth
+    value={field.value || ''}
     variant='outlined'
     error={!!fieldState.error}
     helperText={fieldState.error?.message}

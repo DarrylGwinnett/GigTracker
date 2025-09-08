@@ -7,7 +7,7 @@ const requiredString = (fieldName: string) =>
 
 export const gigSchema = z.object({
     title: requiredString('Title'),
-    category: requiredString('Category'),
+    genre: requiredString('Genre'),
     artist: requiredString('Artist'),
     description: requiredString('Description'),
     date: requiredString('Date'),

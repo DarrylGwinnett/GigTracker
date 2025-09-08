@@ -6,12 +6,14 @@ import { useForm } from "react-hook-form";
 import { gigSchema, type GigSchema } from "../../../lib/schemas/gigSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextInput from "../../../app/layout/shared/TextInput";
+import SelectInput from "../../../app/layout/shared/SelectInput";
+import { genreOptions } from "./GenreOptions";
 
 export default function GigForm() {
   const {  reset, handleSubmit, control} = useForm<GigSchema>(
     {resolver:zodResolver(gigSchema), mode: 'onTouched'});
   const { id } = useParams();
-  const { updateGig, createGig, gig, isLoadingGig } = useGigs(id);
+  const { updateGig, gig, isLoadingGig } = useGigs(id);
 
   useEffect(() => {
     if(gig) reset(gig);
@@ -56,7 +58,7 @@ export default function GigForm() {
       >
         <TextInput control={control} name='title'/>
         <TextInput control={control} name='artist'/>
-        <TextInput control={control} name='category'/>
+        <SelectInput control={control} name='genre'  items={genreOptions}/>
         <TextInput control={control} name='description' multiline rows={3}/>
         <TextInput control={control} name='date' type='date'/>        
         <TextInput control={control} name='venue'/>

@@ -4,7 +4,7 @@ interface Gig {
     artist: string
     date: string
     description: string
-    category: string
+    genre: string
     city: string
     isCancelled: boolean
     venue: string

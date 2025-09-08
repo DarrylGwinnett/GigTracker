@@ -1,7 +1,7 @@
 import { Grid2, Typography } from "@mui/material";
-import GigList from './GigList.tsx'
 import { useGigs } from "../../../lib/hooks/useGigs";
 import GigFilters from "./GigFilters.tsx";
+import GigList from "./GigList.tsx";
 
 
 export default function GigDashboard() {
