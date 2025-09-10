@@ -10,9 +10,9 @@ namespace Persistence
             {
                 var users = new List<User>
                 {
-                    new() { DisplayName = "Bob", UserName = "bob", Email = "bob@myfakedomain.dg" },
-                    new() { DisplayName = "Tim", UserName = "tim", Email = "tim@myfakedomain.dg" },
-                    new() { DisplayName = "Darryl", UserName = "darryl", Email = "darryl@myfakedomain.dg" },
+                    new() { DisplayName = "Bob", UserName = "bob@myfakedomain.dg", Email = "bob@myfakedomain.dg" },
+                    new() { DisplayName = "Tim", UserName = "tim@myfakedomain.dg", Email = "tim@myfakedomain.dg" },
+                    new() { DisplayName = "Darryl", UserName = "darryl@myfakedomain.dg", Email = "darryl@myfakedomain.dg" },
                 };
                 foreach (var user in users)
                 {
