@@ -1,4 +1,4 @@
-﻿using Application.Commands;
+﻿using Application.Gigs.Commands;
 using Application.Gigs.DTO;
 using FluentValidation;
 

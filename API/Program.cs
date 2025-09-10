@@ -1,17 +1,27 @@
 using API.Middleware;
 using Application.Core;
-using Application.Queries;
+using Application.Gigs.Queries;
+using Application.Users.Commands;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Scalar.AspNetCore;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddControllers(opt =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
+});
 builder.Services.AddOpenApi();
 builder.Services.AddMediatR(x => {
     x.RegisterServicesFromAssemblyContaining<GetGigList.Handler>();
+    x.RegisterServicesFromAssemblyContaining<CreateUser.Handler>();
     x.AddOpenBehavior(typeof(ValidationBehaviour<,>));
 });
 builder.Services.AddAutoMapper(config =>
@@ -19,11 +29,19 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<MappingProfiles>();
 }, typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<GetGigList.Handler>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUser.Command>();
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddTransient<ExceptionMiddleware>();
+builder.Services.AddIdentityApiEndpoints<Domain.User>(opt =>
+{
+    opt.User.RequireUniqueEmail = true;
+})
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
 builder.Services.AddCors();
 var app = builder.Build();
 
@@ -31,14 +49,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ExceptionMiddleware>();
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://localhost:3000"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000", "https://localhost:3000"));
 app.MapControllers();
+app.MapGroup("api").MapIdentityApi<Domain.User>();
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
@@ -47,7 +67,8 @@ try
 {
     var context = services.GetRequiredService<AppDbContext>();
     await context.Database.MigrateAsync();
-   // await Dbinitializer.SeedData(context);
+    var um = services.GetRequiredService<UserManager<Domain.User>>();
+    await Dbinitializer.SeedData(context, um);
 }
 catch (Exception ex)
 {

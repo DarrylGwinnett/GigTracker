@@ -1,7 +1,7 @@
-using Application.Commands;
 using Application.Core;
+using Application.Gigs.Commands;
 using Application.Gigs.DTO;
-using Application.Queries;
+using Application.Gigs.Queries;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
