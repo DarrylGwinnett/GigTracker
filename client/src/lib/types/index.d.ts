@@ -12,7 +12,14 @@ type Gig = {
     longitude: number
 }
 
-export type LocationIqSuggestion = {
+type User ={
+    id: string
+    email: string
+    displayName: string
+    imageUrl?: string
+}
+
+type LocationIqSuggestion = {
     place_id: string
     display_name: string
     lat: string
@@ -23,7 +30,7 @@ export type LocationIqSuggestion = {
     displayAddress: string
 }
 
-export type LocationIqAddress = {
+type LocationIqAddress = {
     name?: string
     house_number?: string
     road?: string

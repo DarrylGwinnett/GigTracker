@@ -20,7 +20,7 @@ namespace API.Controllers
         [HttpGet("user-info")]
         public async Task<ActionResult> GetUserInfo()
         {
-            if (User.Identity!.IsAuthenticated) return NoContent();
+            if (!User.Identity!.IsAuthenticated) return NoContent();
             return HandleResult(await Mediator.Send(new GetUserInfo.Query { Username = User.Identity.Name! }));
         }
 
