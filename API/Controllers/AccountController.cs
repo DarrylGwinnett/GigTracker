@@ -17,6 +17,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new CreateUser.Command { registerDTO = registerDTO }));
         }
 
+        [AllowAnonymous]
         [HttpGet("user-info")]
         public async Task<ActionResult> GetUserInfo()
         {
@@ -24,7 +25,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetUserInfo.Query { Username = User.Identity.Name! }));
         }
 
-        [HttpGet("logout")]
+        [HttpPost("logout")]
         public async Task<ActionResult> Logout()
         {
             await signInManager.SignOutAsync();

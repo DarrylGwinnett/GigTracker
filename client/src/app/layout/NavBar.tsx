@@ -13,6 +13,7 @@ import MenuItemLink from './shared/MenuItemLink';
 import { useStore } from '../../lib/hooks/useStore';
 import { Observer } from 'mobx-react-lite';
 import { useAccount } from '../../lib/hooks/useAccount';
+import UserMenu from './UserMenu';
 
 export default function NavBar() {
   const { uiStore } = useStore();
@@ -46,12 +47,10 @@ export default function NavBar() {
             <Box sx={{ display: 'flex' }}>
               <MenuItemLink to="/gigs">Gigs</MenuItemLink>
             </Box>
-            <MenuItemLink to="/createGig">Create Gig</MenuItemLink>
             <MenuItemLink to="/errors">Error Handling</MenuItemLink>
            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>{currentUser ? (
             <>
-            <Typography variant="h6">Welcome, {currentUser.displayName}</Typography>
-               <MenuItemLink to="/login">Logout</MenuItemLink>
+            <UserMenu />
                </>
           ) : (
            <> <MenuItemLink to="/login">Login</MenuItemLink>
