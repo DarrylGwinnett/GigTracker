@@ -1,11 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import agent from '../api/agent';
 import type { LoginSchema } from '../schemas/loginSchema';
+import type { RegisterSchema } from '../schemas/registerSchema';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 export const useAccount = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
   const loginUser = useMutation({
     mutationFn: async (values: LoginSchema) => {
       const response = await agent.post('/login?useCookies=true', values);
@@ -35,8 +38,18 @@ export const useAccount = () => {
       });
       return response.data;
     },
-    enabled: !queryClient.getQueryData(['user']),
+    enabled: !queryClient.getQueryData(['user']) && location.pathname !== '/login' && location.pathname !== '/register',
   });
 
-  return { loginUser, currentUser, loadingUserInfo, logoutUser };
+  const registerUser = useMutation({
+    mutationFn: async (values: RegisterSchema) => {
+      await agent.post('/account/register', values);
+    },
+    onSuccess: () => {
+      toast.success('Registation successful, you can now login.');
+      navigate('/login');
+    },
+  });
+
+  return { loginUser, currentUser, loadingUserInfo, logoutUser, registerUser };
 };

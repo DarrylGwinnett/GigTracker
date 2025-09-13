@@ -1,8 +1,5 @@
 import { z } from 'zod';
-
-const requiredString = (fieldName: string) =>
-  z.string({required_error: `${fieldName} is required.`})
-    .min(3, `${fieldName} is required`);
+import { requiredString } from './commonValidators';
 
 
 export const gigSchema = z.object({

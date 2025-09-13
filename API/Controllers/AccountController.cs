@@ -11,7 +11,7 @@ namespace API.Controllers
     public class AccountController(SignInManager<User> signInManager) : BaseApiController
     {
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<ActionResult> RegisterUser(RegisterDTO registerDTO)
         {
             return HandleResult(await Mediator.Send(new CreateUser.Command { registerDTO = registerDTO }));
