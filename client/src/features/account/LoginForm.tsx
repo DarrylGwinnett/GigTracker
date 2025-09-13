@@ -24,7 +24,9 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginSchema) => {
     await loginUser.mutateAsync(data, {
       onSuccess: () => {
-        navigate(location.state?.from && location.state?.from !== '/login' || '/gigs');
+        navigate(
+          (location.state?.from && location.state?.from !== '/login') || '/gigs'
+        );
       },
     });
   };
