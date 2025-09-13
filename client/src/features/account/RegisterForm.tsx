@@ -4,24 +4,36 @@ import { Box, Button, Paper, Typography } from '@mui/material';
 import { LockOpen } from '@mui/icons-material';
 import TextInput from '../../app/layout/shared/TextInput';
 import { useAccount } from '../../lib/hooks/useAccount';
-import { registerSchema, type RegisterSchema } from '../../lib/schemas/registerSchema';
+import {
+  registerSchema,
+  type RegisterSchema,
+} from '../../lib/schemas/registerSchema';
 
 export default function RegisterForm() {
   const { registerUser } = useAccount();
   const {
     control,
     handleSubmit,
+    setError,
     formState: { isValid, isSubmitting },
   } = useForm<RegisterSchema>({
     mode: 'onTouched',
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data: RegisterSchema) => {
-    await registerUser.mutateAsync(data, {
-      
-    });
-  };
+const onSubmit = async (data: RegisterSchema) => {
+  try {
+    await registerUser.mutateAsync(data);
+  } catch (error) {
+    if (Array.isArray(error)) {
+      error.forEach((err) => {
+        if (err.includes('Email')) setError('email', { message: err });
+        if (err.includes('Password'))
+          setError('password', { message: err });
+      });
+    }
+  }
+};
 
   return (
     <Paper
@@ -62,8 +74,7 @@ export default function RegisterForm() {
         size="large"
       >
         Register
-      </Button>    
+      </Button>
     </Paper>
   );
 }
-

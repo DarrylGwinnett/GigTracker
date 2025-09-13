@@ -46,7 +46,7 @@ export const useAccount = () => {
       await agent.post('/account/register', values);
     },
     onSuccess: () => {
-      toast.success('Registation successful, you can now login.');
+      toast.success('Registration successful, you can now login.');
       navigate('/login');
     },
   });
