@@ -69,7 +69,7 @@ jobs:
       - name: Start API (prod)
         run: |
           DOTNET_HOSTING_URLS=http://127.0.0.1:5000 \
-          dotnet run --project ../API --no-build &
+          dotnet run --project ../API/API.csproj --urls http://127.0.0.1:5000 --no-build &
 
       - name: Serve Client (prod build)
         run: |
