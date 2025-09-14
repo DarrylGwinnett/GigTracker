@@ -12,7 +12,6 @@ import {
 import { Link } from "react-router";
 import { AccessTime, Place } from "@mui/icons-material";
 import { formatDate } from "../../../lib/util/util";
-import type { Gig } from "../../../lib/types";
 
 type Props = {
   gig: Gig;
