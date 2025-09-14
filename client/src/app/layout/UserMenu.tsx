@@ -31,6 +31,7 @@ export default function UserMenu() {
         onClick={handleClick}
         color="inherit"
         size="large"
+        data-testid="user-menu-button"
         sx={{ fontSize: '1.2rem' }}
       >
         <Box display="flex" alignItems="center" gap={2}>
@@ -49,13 +50,13 @@ export default function UserMenu() {
           },
         }}
       >
-        <MenuItem component={Link} to="/createGig" onAbort={handleClose}>
+        <MenuItem component={Link} to="/createGig" onClick={handleClose}>
           <ListItemIcon>
             <Add />
           </ListItemIcon>
           <ListItemText>Create Gig</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to="/profile" onAbort={handleClose}>
+        <MenuItem component={Link} to="/profile" onClick={handleClose}>
           <ListItemIcon>
             <Person />
           </ListItemIcon>
