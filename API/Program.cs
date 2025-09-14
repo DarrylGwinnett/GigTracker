@@ -1,8 +1,10 @@
 using API.Middleware;
 using Application.Core;
 using Application.Gigs.Queries;
+using Application.Interfaces;
 using Application.Users.Commands;
 using FluentValidation;
+using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -35,6 +37,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddTransient<ExceptionMiddleware>();
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddIdentityApiEndpoints<Domain.User>(opt =>
 {
     opt.User.RequireUniqueEmail = true;

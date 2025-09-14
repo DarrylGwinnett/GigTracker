@@ -8,7 +8,7 @@ type Props = {
 
 export default function GigDetailsHeader({gig} : Props) {
     const isCancelled = false;
-    const isHost = true;
+    const isOrganiser = true;
     const isGoing = true;
     const loading = false;
 
@@ -51,7 +51,7 @@ export default function GigDetailsHeader({gig} : Props) {
 
             {/* Buttons aligned to the right */}
             <Box sx={{ display: 'flex', gap: 2 }}>
-                {isHost ? (
+                {isOrganiser ? (
                     <>
                         <Button
                             variant='contained'

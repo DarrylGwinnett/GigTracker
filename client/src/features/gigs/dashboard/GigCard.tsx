@@ -18,11 +18,11 @@ type Props = {
 };
 
 export default function GigCard({ gig }: Props) {
-  const isHost = false;
+  const isOrganiser = false;
   const isGoing = false;
-  const label = isHost ? "You Are Hosting" : "You are going";
+  const label = isOrganiser ? "You Are The Organiser" : "You are going";
   const isCancelled = false;
-  const color = isHost ? "secondary" : isGoing ? "warning" : "default";
+  const color = isOrganiser ? "secondary" : isGoing ? "warning" : "default";
 
   return (
     <Card elevation={5} sx={{ borderRadius: 3 }}>
@@ -42,7 +42,7 @@ export default function GigCard({ gig }: Props) {
           }
         />
         <Box display="flex" flexDirection={"column"} gap={2} mr={2}>
-          {(isHost || isGoing) && (
+          {(isOrganiser || isGoing) && (
             <Chip label={label} color={color} sx={{ borderRadius: 2 }} />
           )}
           {isCancelled && (

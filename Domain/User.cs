@@ -8,5 +8,7 @@ namespace Domain
         public string? Bio { get; set; }
 
         public string? ImageUrl { get; set; }
+
+        public ICollection<GigAttendee> Gigs { get; set; } = [];
     }
 }

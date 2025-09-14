@@ -11,12 +11,12 @@ namespace API.Controllers
     public class GigsController() : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<List<Gig>>> GetGigs() {
+        public async Task<ActionResult<List<GigDto>>> GetGigs() {
             return HandleResult(await Mediator.Send(new GetGigList.Query()));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Result<Gig>>> GetGigDetail(string id)
+        public async Task<ActionResult<Result<GigDto>>> GetGigDetail(string id)
         {
             return HandleResult(await Mediator.Send(new GetGigDetail.Query { Id = id }));
         }
