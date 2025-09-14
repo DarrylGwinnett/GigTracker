@@ -6,7 +6,8 @@ import { useAccount } from './useAccount';
 export const useGigs = (id?: string) => {
   const queryClient = useQueryClient();
   const location = useLocation();
-  const {currentUser} = useAccount();
+  const { currentUser } = useAccount();
+
   const { data: gigs, isLoading } = useQuery({
     queryKey: ['gigs'],
     queryFn: async () => {
@@ -14,6 +15,15 @@ export const useGigs = (id?: string) => {
       return response.data;
     },
     enabled: !id && location.pathname === '/gigs' && !!currentUser,
+    select: (data) => {
+      return data.map((gig) => {
+        return {
+          ...gig,
+          isOrganiser: currentUser?.id === gig.organiserId,
+          isGoing: gig.attendees.some((x) => x.id === currentUser?.id),
+        };
+      });
+    },
   });
 
   const { data: gig, isLoading: isLoadingGig } = useQuery({
@@ -23,6 +33,13 @@ export const useGigs = (id?: string) => {
       return response.data;
     },
     enabled: !!id && !!currentUser,
+    select: (data) => {
+      return {
+        ...data,
+        isOrganiser: currentUser?.id === data.organiserId,
+        isGoing: data.attendees.some((x) => x.id === currentUser?.id),
+      };
+    },
   });
 
   const updateGig = useMutation({

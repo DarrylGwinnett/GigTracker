@@ -26,7 +26,7 @@ namespace Application.Gigs.Commands
                 {
                     GigId = gig.Id,
                     UserId = user.Id,
-                    IsOrganizer = true
+                    IsOrganiser = true
                 };
                 gig.Attendees.Add(attendee);    
                 var result = await context.SaveChangesAsync(cancellationToken);

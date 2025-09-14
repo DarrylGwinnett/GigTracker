@@ -29,7 +29,7 @@ namespace Application.Gigs.Commands
                 if (gig == null) return Result<Unit>.Failure("Could not find gig.", 404);
                 var user =await userAccessor.GetUserAsync();
                 var attendance = gig.Attendees.FirstOrDefault(x => x.UserId == user.Id);
-                var isOrganiser = gig.Attendees.Any(x => x.IsOrganizer && x.UserId == user.Id);
+                var isOrganiser = gig.Attendees.Any(x => x.IsOrganiser && x.UserId == user.Id);
 
                 if(attendance != null)
                 {
@@ -41,7 +41,7 @@ namespace Application.Gigs.Commands
                     gig.Attendees.Add(new()
                     {
                         UserId = user.Id,
-                        IsOrganizer = false,
+                        IsOrganiser = false,
                         GigId = gig.Id,
                     });
                 }

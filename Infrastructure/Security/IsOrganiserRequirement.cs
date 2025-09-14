@@ -25,7 +25,7 @@ namespace Infrastructure.Security
             var gig = dbContext.Gigs.FindAsync(gigId);  
             var attendee = await dbContext.GigAttendees.AsNoTracking().SingleOrDefaultAsync(x => x.User.Id == userId && x.GigId == gigId);
             if (attendee == null) return;
-            if (attendee.IsOrganizer) context.Succeed(requirement);
+            if (attendee.IsOrganiser) context.Succeed(requirement);
 
         }
     }

@@ -10,7 +10,7 @@
 
         public Gig Gig { get; set; } = null!;
 
-        public bool IsOrganizer { get; set; }
+        public bool IsOrganiser { get; set; }
 
         public DateTime DateJoined { get; set; } = DateTime.UtcNow;
     }
