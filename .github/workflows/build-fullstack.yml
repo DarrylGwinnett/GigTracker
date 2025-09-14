@@ -64,7 +64,7 @@ jobs:
         run: |
           cd endToEndTests
           npm ci
-          npx playwright install --with-deps
+          npx playwright install
 
       - name: Start API
         run: dotnet run --project API &
