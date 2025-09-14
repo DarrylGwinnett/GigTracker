@@ -68,7 +68,7 @@ jobs:
 
       - name: Start API (prod)
         working-directory: ./API
-        run: DOTNET_HOSTING_URLS=http://127.0.0.1:5000 dotnet run --no-build &
+        run: DOTNET_HOSTING_URLS=http://127.0.0.1:5000 dotnet run --configuration Release &
 
       - name: Serve Client (prod build)
         run: |
