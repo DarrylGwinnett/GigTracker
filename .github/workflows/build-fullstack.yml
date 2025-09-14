@@ -69,8 +69,10 @@ jobs:
       - name: Start API
         run: dotnet run --project API &
 
-      - name: Start Client
-        run: npm start --prefix client &
+      - name: Serve Client (prod build)
+        run: |
+          npm install -g serve
+          serve -s client/build -l 3000
 
       - name: Wait for services
         run: npx wait-on http://localhost:3000 http://localhost:5000
