@@ -32,7 +32,6 @@ export default function UserMenu() {
         color="inherit"
         size="large"
         sx={{ fontSize: '1.2rem' }}
-        data-testid="user-menu-button"
       >
         <Box display="flex" alignItems="center" gap={2}>
           <Avatar />
@@ -41,7 +40,6 @@ export default function UserMenu() {
       </Button>
       <Menu
         id="basic-menu"
-        data-testid="user-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -51,13 +49,13 @@ export default function UserMenu() {
           },
         }}
       >
-        <MenuItem component={Link} to="/createGig" onClick={handleClose}>
+        <MenuItem component={Link} to="/createGig" onAbort={handleClose}>
           <ListItemIcon>
             <Add />
           </ListItemIcon>
           <ListItemText>Create Gig</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to="/profile" onClick={handleClose}>
+        <MenuItem component={Link} to="/profile" onAbort={handleClose}>
           <ListItemIcon>
             <Person />
           </ListItemIcon>
