@@ -47,6 +47,9 @@ jobs:
   playwright-tests:
     runs-on: ubuntu-latest
     needs: [build-api, build-client]
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
 
@@ -66,14 +69,15 @@ jobs:
           npm ci
           npx playwright install chromium
 
-      - name: Start API (prod)
+      - name: Start API (Release)
         working-directory: ./API
-        run: DOTNET_HOSTING_URLS=http://127.0.0.1:5000 dotnet run --configuration Release &
+        run: |
+          DOTNET_HOSTING_URLS=http://127.0.0.1:5000 nohup dotnet run --configuration Release > api.log 2>&1 &
 
       - name: Serve Client (prod build)
         run: |
           npm install -g serve
-          serve -s ../client/build -l 3000 &
+          nohup serve -s ../client/build -l 3000 > client.log 2>&1 &
 
       - name: Wait for services
         run: npx wait-on http://127.0.0.1:5000 http://localhost:3000
