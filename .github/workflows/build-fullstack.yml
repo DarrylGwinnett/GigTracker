@@ -45,34 +45,34 @@ jobs:
         run: npm run build
 
   playwright-tests:
-  runs-on: ubuntu-latest
-  needs: [build-api, build-client]
-  steps:
-    - uses: actions/checkout@v4
+    runs-on: ubuntu-latest
+    needs: [build-api, build-client]
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 22
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
 
-    - name: Install Playwright
-      run: |
-        cd endToEndTests
-        npm ci
-        npx playwright install chromium
+      - name: Install Playwright
+        run: |
+          cd endToEndTests
+          npm ci
+          npx playwright install chromium
 
-    - name: Install test helper
-      run: npm install -g start-server-and-test
+      - name: Install test helper
+        run: npm install -g start-server-and-test
 
-    - name: Run Playwright tests (API + Client)
-      run: |
-        cd endToEndTests
-        npx start-server-and-test \
-          "DOTNET_HOSTING_URLS=http://127.0.0.1:5000 dotnet run --project ../API" http://127.0.0.1:5000 \
-          "serve -s ../client/build -l 3000" http://localhost:3000 \
-          "npx playwright test --reporter=github --reporter=html"
+      - name: Run Playwright tests (API + Client)
+        run: |
+          cd endToEndTests
+          npx start-server-and-test \
+            "DOTNET_HOSTING_URLS=http://127.0.0.1:5000 dotnet run --project ../API" http://127.0.0.1:5000 \
+            "serve -s ../client/build -l 3000" http://localhost:3000 \
+            "npx playwright test --reporter=github --reporter=html"
