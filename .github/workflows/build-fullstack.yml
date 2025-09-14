@@ -80,17 +80,6 @@ jobs:
           echo "Starting client in background..."
           nohup serve -s ../client/build -l 3000 > client.log 2>&1 &
 
-      - name: Wait for API
-        run: |
-          echo "Waiting for API at http://localhost:5000..."
-          sleep 5
-          if ! wait-on  --timeout 30000 http://localhost:5000; then
-            echo "ERROR: API did not start successfully. Check api.log"
-            cat api.log
-            exit 1
-          fi
-          echo "API is ready!"
-
       - name: Wait for Client
         run: |
           echo "Waiting for Client at http://localhost:3000..."
@@ -101,6 +90,17 @@ jobs:
             exit 1
           fi
           echo "Client is ready!"
+
+      - name: Wait for API
+        run: |
+          echo "Waiting for API at http://localhost:5000..."
+          sleep 5
+          if ! wait-on  --timeout 30000 http://localhost:5000; then
+            echo "ERROR: API did not start successfully. Check api.log"
+            cat api.log
+            exit 1
+          fi
+          echo "API is ready!"
 
       - name: Run Playwright tests
         run: |
