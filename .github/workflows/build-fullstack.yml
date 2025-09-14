@@ -67,8 +67,8 @@ jobs:
           npx playwright install chromium
 
       - name: Start API (prod)
-        run: |
-          DOTNET_HOSTING_URLS=http://127.0.0.1:5000 dotnet run --project ../API/API.csproj --no-build &
+        working-directory: ./API
+        run: DOTNET_HOSTING_URLS=http://127.0.0.1:5000 dotnet run --no-build &
 
       - name: Serve Client (prod build)
         run: |
