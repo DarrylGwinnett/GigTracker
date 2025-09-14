@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -66,13 +66,28 @@ jobs:
           npm ci
           npx playwright install chromium
 
-      - name: Install test helper
-        run: npm install -g start-server-and-test
+      - name: Start API (prod)
+        run: |
+          DOTNET_HOSTING_URLS=http://127.0.0.1:5000 \
+          dotnet run --project ../API --no-build &
 
-      - name: Run Playwright tests (API + Client)
+      - name: Serve Client (prod build)
+        run: |
+          npm install -g serve
+          serve -s ../client/build -l 3000 &
+
+      - name: Wait for services
+        run: npx wait-on http://127.0.0.1:5000 http://localhost:3000
+
+      - name: Run Playwright tests
         run: |
           cd endToEndTests
-          npx start-server-and-test \
-            "DOTNET_HOSTING_URLS=http://127.0.0.1:5000 dotnet run --project ../API" http://127.0.0.1:5000 \
-            "serve -s ../client/build -l 3000" http://localhost:3000 \
-            "npx playwright test --reporter=github --reporter=html"
+          npx playwright test --reporter=github --reporter=html
+
+      - name: Upload Playwright HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report
+          path: endToEndTests/playwright-report
+          retention-days: 7
