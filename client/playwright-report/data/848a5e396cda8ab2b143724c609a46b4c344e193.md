@@ -1,0 +1,65 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - img [ref=e5]
+    - button "Open Tanstack query devtools" [ref=e53] [cursor=pointer]:
+      - img [ref=e54] [cursor=pointer]
+  - region "Notifications Alt+T"
+  - generic [ref=e102]:
+    - banner [ref=e104]:
+      - generic [ref=e106]:
+        - menuitem "GigTracker" [ref=e108] [cursor=pointer]:
+          - img [ref=e109] [cursor=pointer]
+          - heading "GigTracker" [level=4] [ref=e111] [cursor=pointer]
+        - menuitem "Gigs" [ref=e113] [cursor=pointer]
+        - menuitem "Error Handling" [ref=e114] [cursor=pointer]
+        - button "Bob" [ref=e116] [cursor=pointer]:
+          - generic [ref=e117] [cursor=pointer]:
+            - img [ref=e119] [cursor=pointer]
+            - text: Bob
+    - generic [ref=e123]:
+      - generic [ref=e124]:
+        - img [ref=e125]
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - heading "Test Artist in Nottingham" [level=3] [ref=e128]
+            - heading "Test Gig 1757848242797" [level=4] [ref=e129]
+            - heading "29 Sep 2025 06:00 PM" [level=6] [ref=e130]
+            - heading "Hosted by Bob" [level=6] [ref=e131]:
+              - text: Hosted by
+              - link "Bob" [ref=e132] [cursor=pointer]:
+                - /url: /profiles/username
+          - generic [ref=e133]:
+            - button "Cancel Gig" [ref=e134] [cursor=pointer]
+            - link "Manage Event" [ref=e135] [cursor=pointer]:
+              - /url: /manage/03b30d44-a1b6-479c-99fd-13b68052d312
+      - generic [ref=e136]:
+        - generic [ref=e137]:
+          - img [ref=e139]
+          - paragraph [ref=e142]: This is a test gig created by automation
+        - separator [ref=e143]
+        - generic [ref=e144]:
+          - img [ref=e146]
+          - paragraph [ref=e149]: 29 Sep 2025 06:00 PM
+        - separator [ref=e150]
+        - generic [ref=e151]:
+          - img [ref=e153]
+          - generic [ref=e155]:
+            - paragraph [ref=e156]: Rock City, 8, Talbot Street, Lace Market, The Park, Nottingham, East Midlands, England, NG1 5GG, United Kingdom, Nottingham
+            - button "Show Map" [ref=e157] [cursor=pointer]
+      - heading "Chat about this event" [level=6] [ref=e159]
+      - generic [ref=e161]:
+        - generic [ref=e165]:
+          - textbox "Enter your comment (Enter to submit, SHIFT + Enter for new line)" [ref=e166]
+          - group
+        - generic [ref=e168]:
+          - generic [ref=e169]: u
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - link "Bob" [ref=e172] [cursor=pointer]:
+                - /url: /profiles/username
+              - paragraph [ref=e173]: 2 hours ago
+            - paragraph [ref=e174]: Comment goes here
+```

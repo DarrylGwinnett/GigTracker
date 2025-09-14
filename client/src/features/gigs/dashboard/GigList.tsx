@@ -1,17 +1,20 @@
-import { Box, Typography } from "@mui/material";
-import GigCard from "./GigCard";
-import { useGigs } from "../../../lib/hooks/useGigs";
+import { Box, Typography } from '@mui/material';
+import GigCard from './GigCard';
+import { useGigs } from '../../../lib/hooks/useGigs';
 
 export default function GigList() {
-  const { gigs } = useGigs();
-  if (!gigs) {
+  const { gigs, isLoading } = useGigs();
+  if (isLoading) {
     return <Typography>Loading...</Typography>;
+  }
+  if (!gigs) {
+    return <Typography>No activities found...</Typography>;
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       {gigs.map((gig) => (
-        <GigCard key={gig.id} gig={gig} /> 
+        <GigCard key={gig.id} gig={gig} />
       ))}
     </Box>
   );

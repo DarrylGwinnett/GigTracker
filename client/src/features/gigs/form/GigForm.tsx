@@ -1,21 +1,20 @@
-import { Box, Button, Paper, Typography } from "@mui/material";
-import { useEffect } from "react";
-import { useGigs } from "../../../lib/hooks/useGigs";
-import { useNavigate, useParams } from "react-router";
-import { useForm } from "react-hook-form";
-import { gigSchema, type GigSchema } from "../../../lib/schemas/gigSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import TextInput from "../../../app/layout/shared/TextInput";
-import SelectInput from "../../../app/layout/shared/SelectInput";
-import { genreOptions } from "./GenreOptions";
-import DateTimeInput from "../../../app/layout/shared/DateTimeInput";
-import LocationInput from "../../../app/layout/shared/LocationInput";
-import type { Gig } from "../../../lib/types";
+import { Box, Button, Paper, Typography } from '@mui/material';
+import { useEffect } from 'react';
+import { useGigs } from '../../../lib/hooks/useGigs';
+import { useNavigate, useParams } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { gigSchema, type GigSchema } from '../../../lib/schemas/gigSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import TextInput from '../../../app/layout/shared/TextInput';
+import SelectInput from '../../../app/layout/shared/SelectInput';
+import { genreOptions } from './GenreOptions';
+import DateTimeInput from '../../../app/layout/shared/DateTimeInput';
+import LocationInput from '../../../app/layout/shared/LocationInput';
 
 export default function GigForm() {
   const { reset, handleSubmit, control } = useForm<GigSchema>({
     resolver: zodResolver(gigSchema),
-    mode: "onTouched",
+    mode: 'onTouched',
   });
   const { id } = useParams();
   const { createGig, updateGig, gig, isLoadingGig } = useGigs(id);
@@ -43,17 +42,17 @@ export default function GigForm() {
     };
     try {
       if (gig) {
-        updateGig.mutate({ ...gig, ...flattenedData }, {
-          onSuccess: () =>  navigate(`/gigs/${gig.id}`)
-        })
-      }
-      else{
+        updateGig.mutate(
+          { ...gig, ...flattenedData },
+          {
+            onSuccess: () => navigate(`/gigs/${gig.id}`),
+          }
+        );
+      } else {
         createGig.mutate(flattenedData as unknown as Gig, {
-          onSuccess: (id) =>  navigate(`/gigs/${id}`)
-        })
+          onSuccess: (id) => navigate(`/gigs/${id}`),
+        });
       }
-      
-      ;      
     } catch (error) {
       console.error(error);
     }
@@ -63,7 +62,7 @@ export default function GigForm() {
   return (
     <Paper sx={{ borderRadius: 3, padding: 3 }}>
       <Typography variant="h5" gutterBottom color="primary">
-        {gig ? "Edit Gig" : "Create Gig"}
+        {gig ? 'Edit Gig' : 'Create Gig'}
       </Typography>
       <Box
         component="form"
@@ -85,7 +84,7 @@ export default function GigForm() {
           name="location"
           label="Enter the location"
         />
-        <Box display="flex" justifyContent={"end"} gap={3}>
+        <Box display="flex" justifyContent={'end'} gap={3}>
           <Button color="inherit">Cancel</Button>
           <Button
             color="success"

@@ -1,8 +1,6 @@
 import { Card, Badge, CardMedia, Box, Typography, Button } from "@mui/material";
 import { Link } from "react-router";
 import { formatDate } from "../../../lib/util/util";
-import type { Gig } from "../../../lib/types";
-
 
 type Props = {
     gig: Gig;

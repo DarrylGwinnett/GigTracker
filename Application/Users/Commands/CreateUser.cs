@@ -25,8 +25,26 @@ public class CreateUser
             var result = await signInManager.UserManager.CreateAsync(user, request.registerDTO.Password);
             if (!result.Succeeded)
             {
-              var errs = result.Errors.ToArray().Select(e => e.Description); 
-                return Result<Unit>.Failure(errs, 400);
+                var errs = new Dictionary<string, string[]>();
+
+                foreach (var error in result.Errors)
+                {
+                    // Map Identity error codes to DTO property names
+                    var key = error.Code switch
+                    {
+                        "DuplicateUserName" or "InvalidUserName" => "registerDTO.Email",
+                        "InvalidEmail" => "registerDTO.Email",
+                        "PasswordTooShort" or "PasswordRequiresNonAlphanumeric" or "PasswordRequiresDigit" or "PasswordRequiresUpper" or "PasswordRequiresLower" => "registerDTO.Password",
+                        _ => "registerDTO"
+                    };
+
+                    if (!errs.TryGetValue(key, out string[]? value))
+                        errs[key] = [error.Description];
+                    else
+                        errs[key] = [.. value, error.Description];
+                }
+
+                return Result<Unit>.ValidationFailure(errs, 400);
             }
             return Result<Unit>.Success(Unit.Value);
         }

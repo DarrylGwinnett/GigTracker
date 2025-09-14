@@ -12,8 +12,7 @@ export default function TestErrors() {
             if (method === 'post') await agent.post(path, {});
             else await agent.get(path);
         },
-        onError: (err) => {
-            
+        onError: (err) => {            
             if (Array.isArray(err)) {
                 setValidationErrors(err);
             } else {

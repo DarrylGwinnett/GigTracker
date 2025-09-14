@@ -15,15 +15,16 @@ namespace API.Controllers
 
         protected ActionResult HandleResult<T>(Result<T> result)
         {
-          if(!result.IsSuccess && result.StatusCode == 404)
+            if (!result.IsSuccess && result.StatusCode == 404)
             {
                 return NotFound(result.Error);
             }
-          if(result.IsSuccess && result.Value != null)
+            if (result.IsSuccess && result.Value != null)
             {
                 return Ok(result.Value);
             }
-          return BadRequest(result.Error);
+            if(result.Error is not null) return BadRequest(result.Error);
+            return BadRequest(result);
         }
     }
 }
