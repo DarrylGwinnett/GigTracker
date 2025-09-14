@@ -68,6 +68,7 @@ jobs:
           cd endToEndTests
           npm ci
           npx playwright install chromium
+          npm install -g wait-on serve
 
       - name: Start API (Release)
         working-directory: ./API
