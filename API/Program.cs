@@ -32,7 +32,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<GetGigList.Handler>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUser.Command>();
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddTransient<ExceptionMiddleware>();
 builder.Services.AddIdentityApiEndpoints<Domain.User>(opt =>
