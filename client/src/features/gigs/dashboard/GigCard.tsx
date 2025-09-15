@@ -12,6 +12,7 @@ import {
 import { Link } from 'react-router';
 import { AccessTime, Place } from '@mui/icons-material';
 import { formatDate } from '../../../lib/util/util';
+import AvatarPopover from '../../../app/layout/shared/AvatarPopover';
 
 type Props = {
   gig: Gig;
@@ -75,13 +76,7 @@ export default function GigCard({ gig }: Props) {
           mt={2}
         >
           {gig.attendees.map((x) => (
-            <Avatar
-              key={x.id}
-              alt={x.displayName + ' image'}
-              src={x.imageUrl}
-              component={Link}
-              to={`/profiles/${x.id}`}
-            />
+            <AvatarPopover profile={x} key={x.id} />
           ))}
         </Box>
       </CardContent>

@@ -24,7 +24,7 @@ export default function ProfileCard({ profile }: Props) {
       >
         <CardMedia
           component={'img'}
-          src={profile?.imageUrl || '/images/user.png'}
+          src={profile?.imageUrl || `images/categoryImages/drinks.jpg`}
           sx={{ width: 200, zIndex: 50 }}
           alt={profile.displayName + ' image'}
         />
