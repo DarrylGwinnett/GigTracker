@@ -1,8 +1,10 @@
 using API.Middleware;
 using Application.Core;
 using Application.Gigs.Queries;
+using Application.Interfaces;
 using Application.Users.Commands;
 using FluentValidation;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -19,7 +21,8 @@ builder.Services.AddControllers(opt =>
     opt.Filters.Add(new AuthorizeFilter(policy));
 });
 builder.Services.AddOpenApi();
-builder.Services.AddMediatR(x => {
+builder.Services.AddMediatR(x =>
+{
     x.RegisterServicesFromAssemblyContaining<GetGigList.Handler>();
     x.RegisterServicesFromAssemblyContaining<CreateUser.Handler>();
     x.AddOpenBehavior(typeof(ValidationBehaviour<,>));
@@ -35,6 +38,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddTransient<ExceptionMiddleware>();
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddIdentityApiEndpoints<Domain.User>(opt =>
 {
     opt.User.RequireUniqueEmail = true;
@@ -43,6 +47,14 @@ builder.Services.AddIdentityApiEndpoints<Domain.User>(opt =>
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddCors();
+
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("IsGigOrganiser", policy =>
+    {
+        policy.Requirements.Add(new IsOrganiserRequirement());
+    });
+builder.Services.AddTransient<IAuthorizationHandler, IsOrganiserRequirementHandler>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

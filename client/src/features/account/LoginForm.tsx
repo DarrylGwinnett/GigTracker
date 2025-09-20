@@ -22,11 +22,13 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginSchema) => {
+    const route =
+      location.state?.from && location.state?.from !== '/login'
+        ? location.state?.from
+        : '/gigs';
     await loginUser.mutateAsync(data, {
       onSuccess: () => {
-        navigate(
-          (location.state?.from && location.state?.from !== '/login') || '/gigs'
-        );
+        navigate(route);
       },
     });
   };

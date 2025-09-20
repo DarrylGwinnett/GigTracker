@@ -34,7 +34,6 @@ export default function GigForm() {
   }, [gig, reset]);
 
   const onSubmit = async (data: GigSchema) => {
-    console.log(data);
     const { location, ...rest } = data;
     const flattenedData = {
       ...rest,
