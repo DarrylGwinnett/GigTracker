@@ -1,14 +1,15 @@
-import { Card, Badge, CardMedia, Box, Typography, Button } from '@mui/material';
+import { Card, CardMedia, Box, Typography, Chip} from '@mui/material';
 import { Link } from 'react-router';
 import { formatDate } from '../../../lib/util/util';
+import { useGigs } from '../../../lib/hooks/useGigs';
+import StyledButton from '../../../app/layout/shared/StyledButton';
 
 type Props = {
   gig: Gig;
 };
 
 export default function GigDetailsHeader({ gig }: Props) {
-  const loading = false;
-
+  const { updateAttendance } = useGigs(gig.id);
   return (
     <Card
       sx={{
@@ -19,10 +20,10 @@ export default function GigDetailsHeader({ gig }: Props) {
       }}
     >
       {gig.isCancelled && (
-        <Badge
-          sx={{ position: 'absolute', left: 40, top: 20, zIndex: 1000 }}
+        <Chip
+          sx={{ position: 'absolute', left: 40, top: 20, zIndex: 1000, borderRadius: 1 }}
           color="error"
-          badgeContent="Cancelled"
+          label="Cancelled"
         />
       )}
       <CardMedia
@@ -70,15 +71,16 @@ export default function GigDetailsHeader({ gig }: Props) {
         <Box sx={{ display: 'flex', gap: 2 }}>
           {gig.isOrganiser ? (
             <>
-              <Button
+              <StyledButton
                 variant="contained"
                 color={gig.isCancelled ? 'success' : 'error'}
-                onClick={() => {}}
+                onClick={() => updateAttendance.mutate(gig.id)}
+                disabled={updateAttendance.isPending}
                 sx={{ whiteSpace: 'nowrap', mx: 2 }}
               >
                 {gig.isCancelled ? 'Re-activate Gig' : 'Cancel Gig'}
-              </Button>
-              <Button
+              </StyledButton>
+              <StyledButton
                 variant="contained"
                 sx={{ whiteSpace: 'nowrap', mx: 2 }}
                 color="primary"
@@ -87,17 +89,17 @@ export default function GigDetailsHeader({ gig }: Props) {
                 disabled={gig.isCancelled}
               >
                 Manage Event
-              </Button>
+              </StyledButton>
             </>
           ) : (
-            <Button
+            <StyledButton
               variant="contained"
               color={gig.isGoing ? 'primary' : 'info'}
-              onClick={() => {}}
-              disabled={gig.isCancelled || loading}
+              onClick={() => updateAttendance.mutate(gig.id)}
+              disabled={updateAttendance.isPending || gig.isCancelled}
             >
               {gig.isGoing ? 'Cancel Attendance' : 'Join Event'}
-            </Button>
+            </StyledButton>
           )}
         </Box>
       </Box>

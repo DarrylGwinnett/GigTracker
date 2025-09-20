@@ -9,7 +9,6 @@ export default function RequireAuth() {
   if (loadingUserInfo) {
     return <Typography>Loading...</Typography>;
   }
-  console.log(currentUser);
   if (!currentUser) {
     // Redirect to login page or show a message
     return <Navigate to="/login" state={{ from: location }}></Navigate>;

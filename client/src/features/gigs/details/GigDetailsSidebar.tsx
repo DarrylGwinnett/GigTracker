@@ -32,7 +32,7 @@ export default function GigDetailsSidebar({ gig }: Props) {
       </Paper>
       <Paper sx={{ padding: 2 }}>
         {gig.attendees.map((attendee) => (
-          <Grid2 container alignItems="center">
+          <Grid2 container alignItems="center" key={attendee.id}>
             <Grid2 size={8}>
               <List sx={{ display: 'flex', flexDirection: 'column' }}>
                 <ListItem>
@@ -46,11 +46,11 @@ export default function GigDetailsSidebar({ gig }: Props) {
                   </ListItemAvatar>
                   <ListItemText>
                     <Typography variant="h6">{attendee.displayName}</Typography>
-                                  {following && (
-                <Typography variant="body2" color="orange">
-                  Following
-                </Typography>
-              )}
+                    {following && (
+                      <Typography variant="body2" color="orange">
+                        Following
+                      </Typography>
+                    )}
                   </ListItemText>
                 </ListItem>
               </List>
@@ -72,7 +72,6 @@ export default function GigDetailsSidebar({ gig }: Props) {
                   sx={{ borderRadius: 2 }}
                 />
               )}
-
             </Grid2>
           </Grid2>
         ))}

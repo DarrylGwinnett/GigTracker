@@ -44,7 +44,7 @@ export const useGigs = (id?: string) => {
 
   const updateGig = useMutation({
     mutationFn: async (gig: Gig) => {
-      await agent.put('/gigs', gig);
+      await agent.put(`/gigs/${gig.id}`, gig);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['gigs'] });
@@ -70,6 +70,17 @@ export const useGigs = (id?: string) => {
     },
   });
 
+  const updateAttendance = useMutation({
+    mutationFn: async (id: string) => {
+      await agent.post(`/gigs/${id}/attend`);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['gigs', id],
+      });
+    },
+  });
+
   return {
     gig,
     isLoadingGig,
@@ -78,5 +89,6 @@ export const useGigs = (id?: string) => {
     updateGig,
     createGig,
     deleteGig,
+    updateAttendance,
   };
 };
