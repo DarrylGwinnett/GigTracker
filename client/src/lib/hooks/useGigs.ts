@@ -43,11 +43,43 @@ export const useGigs = (id?: string) => {
   });
 
   const updateGig = useMutation({
-    mutationFn: async (gig: Gig) => {
-      await agent.put(`/gigs/${gig.id}`, gig);
+    mutationFn: async (id: string) => {
+      await agent.put(`/gigs/${id}`, gig);
     },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['gigs'] });
+    onMutate: async (gigId: string) => {
+      await queryClient.cancelQueries({ queryKey: ['gigs', gigId] });
+      const prevGig = queryClient.getQueryData<Gig>(['gigs', gigId]);
+      queryClient.setQueryData<Gig>(['gigs', gigId], (oldGig) => {
+        if (!oldGig || !currentUser) {
+          return oldGig;
+        }
+        const isOrganiser = oldGig.organiserId === currentUser.id;
+        const isAttending = oldGig.attendees.some(
+          (x) => x.id == currentUser.id
+        );
+        return {
+          ...oldGig,
+          isCancelled: isOrganiser ? !oldGig.isCancelled : oldGig.isCancelled,
+          attendees: isAttending
+            ? isOrganiser
+              ? oldGig.attendees
+              : oldGig.attendees.filter((x) => x.id !== currentUser.id)
+            : [
+                ...oldGig.attendees,
+                {
+                  id: currentUser.id,
+                  displayName: currentUser.displayName,
+                  imageUrl: currentUser.imageUrl,
+                }],
+        };
+      });
+      return { prevGig}
+    },
+    onError: (error, gigId, context) => {
+      console.log(error);
+      if (context?.prevGig) {
+        queryClient.setQueryData(['gigs', gigId], context.prevGig);
+      }
     },
   });
 
