@@ -42,7 +42,7 @@ export default function GigForm() {
     try {
       if (gig) {
         updateGig.mutate(
-          gig.id,
+          { ...gig, ...flattenedData },
           {
             onSuccess: () => navigate(`/gigs/${gig.id}`),
           }
