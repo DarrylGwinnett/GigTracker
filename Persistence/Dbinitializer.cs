@@ -29,7 +29,7 @@ namespace Persistence
                 new() {
                     Title = "Past Activity 1",
                     Artist = "Iron Maiden",
-                    Date = DateTime.Now.AddMonths(-2),
+                    Date = DateTime.UtcNow.AddMonths(-2),
                     Description = "Activity 2 months ago",
                     Genre = "drinks",
                     City = "London",
@@ -42,7 +42,7 @@ namespace Persistence
                 new() {
                     Title = "Past Activity 2",
                     Artist = "Gojira",
-                    Date = DateTime.Now.AddMonths(-1),
+                    Date = DateTime.UtcNow.AddMonths(-1),
                     Description = "Activity 1 month ago",
                     Genre = "culture",
                     City = "Paris",

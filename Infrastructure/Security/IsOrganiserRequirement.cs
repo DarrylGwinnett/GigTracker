@@ -22,7 +22,7 @@ namespace Infrastructure.Security
             }
             var httpContext = httpContextAccessor.HttpContext;
             if (httpContext.GetRouteValue("id") is not string gigId) return;
-            var gig = dbContext.Gigs.FindAsync(gigId);  
+            var gig = await dbContext.Gigs.FindAsync(gigId);  
             var attendee = await dbContext.GigAttendees.AsNoTracking().SingleOrDefaultAsync(x => x.User.Id == userId && x.GigId == gigId);
             if (attendee == null) return;
             if (attendee.IsOrganiser) context.Succeed(requirement);

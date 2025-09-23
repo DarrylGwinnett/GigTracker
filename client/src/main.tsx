@@ -21,7 +21,7 @@ createRoot(document.getElementById("root")!).render(
     <LocalizationProvider dateAdapter={AdapterDateFns}>
     <StoreContext.Provider value={store}>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
+        <ReactQueryDevtools />
         <ToastContainer position='bottom-right' hideProgressBar theme="colored"/>
         <RouterProvider router={router} />
       </QueryClientProvider>
