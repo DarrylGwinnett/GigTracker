@@ -6,22 +6,19 @@ on:
       - main
 
 jobs:
-jobs:
-  build-image:
+  build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
 
+      # --- Docker build ---
       - name: Build Docker image
-        run: |
-          docker build -t fullstack-app .
+        run: docker build -t fullstack-app .
 
-  playwright-tests:
-    runs-on: ubuntu-latest
-    needs: build-image
-    steps:
-      - uses: actions/checkout@v4
-
+      # --- Install Node + Playwright for tests ---
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -31,25 +28,26 @@ jobs:
         run: |
           cd endToEndTests
           npm ci
-          npx playwright install chromium
+          npx playwright install
           npm install -g wait-on
 
-      - name: Run Docker container
+      # --- Run Docker container ---
+      - name: Run fullstack app container
         run: |
-          docker run -d --name fullstack-app -p 5000:5000 fullstack-app
-          # Wait for API (and React is served through API)
-          if ! wait-on --timeout 30000 http://localhost:5000; then
-            echo "ERROR: App did not start successfully"
+          docker run -d --name fullstack-app -p 8080:8080 fullstack-app
+          # Wait for API + client
+          if ! wait-on --timeout 30000 http://localhost:8080; then
             docker logs fullstack-app
             exit 1
           fi
-          echo "App is ready!"
 
+      # --- Run Playwright tests ---
       - name: Run Playwright tests
         run: |
           cd endToEndTests
           npx playwright test --reporter=github --reporter=html
 
+      # --- Upload report ---
       - name: Upload Playwright HTML Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -58,5 +56,6 @@ jobs:
           path: endToEndTests/playwright-report
           retention-days: 7
 
+      # --- Stop container ---
       - name: Stop Docker container
         run: docker stop fullstack-app
