@@ -34,9 +34,9 @@ jobs:
       # --- Run Docker container ---
       - name: Run fullstack app container
         run: |
-          docker run -d --name fullstack-app -p 5000:5000 fullstack-app
+          docker run -d --name fullstack-app -p 8080:8080 fullstack-app
           # Wait for API + client
-          if ! wait-on --timeout 30000 http://localhost:5000; then
+          if ! wait-on --timeout 30000 http://localhost:8080; then
             docker logs fullstack-app
             exit 1
           fi
