@@ -9,31 +9,18 @@ services:
       - pg-data:/var/lib/postgresql/data
       
 
-  api:
+  app:
     build:
       context: .
-      dockerfile: API/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
       - "5001:5001"
+      - "8080:8080"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000"]
       interval: 2s
       retries: 10
-  client:
-    build: ./client
-    ports:
-      - "3000:3000"
-    depends_on:
-      api:
-        condition: service_healthy
 
 volumes:
   pg-data:
-  pgadmin:
-    image: dpage/pgadmin4:8
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "8080:80"
