@@ -1,11 +1,11 @@
-# ---- Frontend build ----
 FROM node:22 AS frontend-build
 WORKDIR /app
 COPY client/ ./
-RUN npm install
+RUN ls -al /app
+RUN npm ci
 RUN npm run build
+RUN ls -al /app  # check that 'dist' exists
 
-# ---- Backend build ----
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["API/API.csproj", "API/"]
@@ -18,10 +18,9 @@ COPY . .
 WORKDIR /src/API
 RUN dotnet publish "API.csproj" -c Release -o /app/publish
 
-# ---- Final runtime image ----
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
-# Copy React build into wwwroot
+
 COPY --from=frontend-build /app/dist ./wwwroot
 ENTRYPOINT ["dotnet", "API.dll"]
