@@ -1,10 +1,8 @@
 FROM node:22 AS frontend-build
 WORKDIR /app
 COPY client/ ./
-RUN ls -al /app
 RUN npm ci
 RUN npm run build
-RUN ls -al /app  # check that 'dist' exists
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
@@ -22,5 +20,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
-COPY --from=frontend-build /app/dist ./wwwroot
 ENTRYPOINT ["dotnet", "API.dll"]
