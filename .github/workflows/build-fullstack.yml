@@ -6,7 +6,6 @@ on:
       - main
 
 jobs:
-jobs:
   build-image:
     runs-on: ubuntu-latest
     steps:
