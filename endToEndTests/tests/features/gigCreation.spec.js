@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('create a new gig', async ({ page }) => {
   // Login first
-  await page.goto('https://localhost:3000/gigs');
+  await page.goto('https://localhost:8080/gigs');
   await page.getByRole('menuitem', { name: 'Login' }).click();
   await page.getByLabel('Email').fill('bob@myfakedomain.dg');
   await page.getByLabel('Password').fill('Pa$$w0rd');
@@ -11,7 +11,7 @@ test('create a new gig', async ({ page }) => {
   // Open user menu and click Create Gig
   await page.getByTestId('user-menu-button').click();
   await page.getByRole('menuitem', { name: 'Create Gig' }).click();
-  await expect(page).toHaveURL('https://localhost:3000/createGig');
+  await expect(page).toHaveURL('https://localhost:8080/createGig');
 
   // Fill in the gig form
   const testGigTitle = `Test Gig ${Date.now()}`;

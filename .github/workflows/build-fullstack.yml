@@ -28,7 +28,7 @@ jobs:
         run: |
           cd endToEndTests
           npm ci
-          npx playwright install chromium
+          npx playwright install
           npm install -g wait-on
 
       # --- Run Docker container ---

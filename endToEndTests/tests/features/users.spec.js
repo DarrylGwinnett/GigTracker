@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('login and verify gigs list', async ({ page }) => {
   // Navigate to home page
-  await page.goto('https://localhost:3000/gigs');
+  await page.goto('https://localhost:8080/gigs');
 
   // Click login link
   await page.getByRole('menuitem', { name: 'Login' }).click();
