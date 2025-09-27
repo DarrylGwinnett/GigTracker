@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { LockOpen } from '@mui/icons-material';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import TextInput from '../../app/layout/shared/TextInput';
 import { useAccount } from '../../lib/hooks/useAccount';
 import type { LoginSchema } from '../../lib/schemas/loginSchema';
@@ -11,7 +11,6 @@ import { loginSchema } from '../../lib/schemas/loginSchema';
 export default function LoginForm() {
   const { loginUser } = useAccount();
   const navigate = useNavigate();
-  const location = useLocation();
   const {
     control,
     handleSubmit,
@@ -22,17 +21,14 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginSchema) => {
-    const pathName = location.state?.from.pathname;
-    const relocate =
-      pathName === undefined || pathName === '/login' ? '/gigs' : pathName;
-    console.log('we are latest');
-    console.log(relocate);
     await loginUser.mutateAsync(data, {
       onSuccess: () => {
-        console.log("We have succeeded")
-        navigate(relocate);
+        console.log('starting nav');
+        navigate('/gigs');
+        console.log('finishing nav');
       },
     });
+    console.log('finished on success')
   };
 
   return (

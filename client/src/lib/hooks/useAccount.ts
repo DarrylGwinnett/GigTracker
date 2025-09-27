@@ -12,10 +12,13 @@ export const useAccount = () => {
   const loginUser = useMutation({
     mutationFn: async (values: LoginSchema) => {
       const response = await agent.post('/login?useCookies=true', values);
+      console.log('finished login');
       return response.data;
     },
     onSuccess: async () => {
+      console.log('reftching query');
       await queryClient.invalidateQueries({ queryKey: ['user'] });
+      console.log('finished query');
     },
   });
 
@@ -39,9 +42,7 @@ export const useAccount = () => {
       return response.data;
     },
     enabled:
-      !queryClient.getQueryData(['user']) &&
-      location.pathname !== '/login' &&
-      location.pathname !== '/register',
+      !queryClient.getQueryData(['user']) && location.pathname !== '/register',
   });
 
   const registerUser = useMutation({
