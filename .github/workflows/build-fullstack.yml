@@ -24,6 +24,10 @@ jobs:
         with:
           node-version: 22
 
+      - name: Install Playwright
+        run: |
+          npm install -g wait-on
+
       # --- Run Docker container ---
       - name: Run fullstack app container
         run: |
