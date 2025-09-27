@@ -24,13 +24,6 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install Playwright
-        run: |
-          cd endToEndTests
-          npm ci
-          npx playwright install
-          npm install -g wait-on
-
       # --- Run Docker container ---
       - name: Run fullstack app container
         run: |
@@ -41,11 +34,10 @@ jobs:
             exit 1
           fi
 
-      # --- Run Playwright tests ---
-      - name: Run Playwright tests
+      - name: Run Playwright tests in Docker
         run: |
-          cd endToEndTests
-          npx playwright test --reporter=github --reporter=html
+          docker run --rm -v ${{ github.workspace }}/endToEndTests:/tests -w /tests mcr.microsoft.com/playwright:v1.37.0-focal \
+            bash -c "npm ci && npx playwright install && npx playwright test --reporter=github --reporter=html"
 
       # --- Upload report ---
       - name: Upload Playwright HTML Report
