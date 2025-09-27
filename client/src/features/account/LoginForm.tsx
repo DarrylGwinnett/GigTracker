@@ -22,13 +22,15 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginSchema) => {
-    const route =
-      location.state?.from && location.state?.from !== '/login'
-        ? location.state?.from
-        : '/gigs';
+    const pathName = location.state?.from.pathname;
+    const relocate =
+      pathName === undefined || pathName === '/login' ? '/gigs' : pathName;
+    console.log('we are latest');
+    console.log(relocate);
     await loginUser.mutateAsync(data, {
       onSuccess: () => {
-        navigate(route);
+        console.log("We have succeeded")
+        navigate(relocate);
       },
     });
   };
