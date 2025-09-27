@@ -15,7 +15,7 @@ test('login and verify gigs list', async ({ page }) => {
   await page.getByRole('button', { name: 'Login' }).click();
 
   // Verify redirect and content
-  await expect(page).toHaveURL('https://localhost:3000/gigs');
+  await expect(page).toHaveURL('http://localhost:8080/gigs');
 
   // Verify login state (nav should show logout instead of login)
   await expect(page.getByRole('menuitem', { name: 'Login' })).not.toBeVisible();
