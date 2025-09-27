@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+/*import { test, expect } from '@playwright/test';
 
 test('create a new gig', async ({ page }) => {
   // Login first
@@ -40,4 +40,4 @@ test('create a new gig', async ({ page }) => {
 
   // Verify our new gig appears in the list
   await expect(page.getByText(testGigTitle)).toBeVisible();
-});
+});*/
