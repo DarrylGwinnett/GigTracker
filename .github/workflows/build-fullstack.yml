@@ -18,36 +18,28 @@ jobs:
       - name: Build Docker image
         run: docker build -t fullstack-app .
 
-      # --- Create Docker network ---
-      - name: Create Docker network
-        run: docker network create fullstack-net || true
-
-      - name: Install wait-on
-        run: npm install -g wait-on
-
-      # --- Run fullstack app container on network ---
+      # --- Run fullstack app container ---
       - name: Run fullstack app container
         run: |
           docker run -d \
             --name fullstack-app \
-            --network fullstack-net \
             -p 8080:8080 \
             fullstack-app
+
           # Wait for API + client to be ready
+          npm install -g wait-on
           if ! wait-on --timeout 30000 http://localhost:8080; then
             docker logs fullstack-app
             exit 1
           fi
 
-      # --- Run Playwright tests inside official Docker image on same network ---
-      - name: Run Playwright tests in Docker
+      # --- Run Playwright tests directly in runner ---
+      - name: Run Playwright tests
+        working-directory: ./endToEndTests
         run: |
-          docker run --rm \
-            --network fullstack-net \
-            -v ${{ github.workspace }}/endToEndTests:/tests \
-            -w /tests \
-            mcr.microsoft.com/playwright:v1.37.0-focal \
-            bash -c "npm ci && npx playwright install && npx playwright test --reporter=github --reporter=html --project=chromium"
+          npm ci
+          npx playwright install
+          npx playwright test --reporter=github --reporter=html --project=chromium
 
       # --- Upload Playwright HTML report ---
       - name: Upload Playwright HTML Report
