@@ -14,36 +14,39 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # --- Docker build ---
+      # --- Build Docker image ---
       - name: Build Docker image
         run: docker build -t fullstack-app .
 
-      # --- Install Node + Playwright for tests ---
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+      # --- Create Docker network ---
+      - name: Create Docker network
+        run: docker network create fullstack-net || true
 
-      - name: Install Playwright
-        run: |
-          npm install -g wait-on
-
-      # --- Run Docker container ---
+      # --- Run fullstack app container on network ---
       - name: Run fullstack app container
         run: |
-          docker run -d --name fullstack-app -p 8080:8080 fullstack-app
-          # Wait for API + client
+          docker run -d \
+            --name fullstack-app \
+            --network fullstack-net \
+            -p 8080:8080 \
+            fullstack-app
+          # Wait for API + client to be ready
           if ! wait-on --timeout 30000 http://localhost:8080; then
             docker logs fullstack-app
             exit 1
           fi
 
+      # --- Run Playwright tests inside official Docker image on same network ---
       - name: Run Playwright tests in Docker
         run: |
-          docker run --rm -v ${{ github.workspace }}/endToEndTests:/tests -w /tests mcr.microsoft.com/playwright:v1.37.0-focal \
-            bash -c "npm ci && npx playwright install && npx playwright test --reporter=github --reporter=html"
+          docker run --rm \
+            --network fullstack-net \
+            -v ${{ github.workspace }}/endToEndTests:/tests \
+            -w /tests \
+            mcr.microsoft.com/playwright:v1.37.0-focal \
+            bash -c "npm ci && npx playwright install && npx playwright test --reporter=github --reporter=html --project=chromium"
 
-      # --- Upload report ---
+      # --- Upload Playwright HTML report ---
       - name: Upload Playwright HTML Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -52,6 +55,8 @@ jobs:
           path: endToEndTests/playwright-report
           retention-days: 7
 
-      # --- Stop container ---
+      # --- Stop and remove app container ---
       - name: Stop Docker container
-        run: docker stop fullstack-app
+        run: |
+          docker stop fullstack-app
+          docker rm fullstack-app
