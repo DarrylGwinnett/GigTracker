@@ -40,4 +40,4 @@ jobs:
           npx playwright install --with-deps
 
           # Run tests with increased timeout
-          PLAYWRIGHT_TEST_TIMEOUT=60000 npx playwright test --reporter=github --reporter=html
+          PLAYWRIGHT_TEST_TIMEOUT=30000 npx playwright test --reporter=github --reporter=html
