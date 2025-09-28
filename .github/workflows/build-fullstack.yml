@@ -25,6 +25,7 @@ jobs:
             --name fullstack-app \
             -p 8080:8080 \
             -p 5432:5432 \
+            -e ConnectionStrings__DefaultConnection="Host=localhost;Database=gigtracker;Username=postgres;Password=postgres" \
             fullstack-app
 
           echo "Waiting for application to start..."
