@@ -24,6 +24,7 @@ jobs:
           docker run -d \
             --name fullstack-app \
             -p 8080:8080 \
+            -p 5432:5432 \
             fullstack-app
 
           echo "Waiting for application to start..."
