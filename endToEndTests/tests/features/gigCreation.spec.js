@@ -43,4 +43,5 @@ test.describe('Gig creation flow', () => {
     // Verify our new gig appears in the list
     await expect(page.getByText(testGigTitle)).toBeVisible();
   });
+
 });
