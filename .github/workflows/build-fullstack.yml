@@ -34,6 +34,7 @@ jobs:
           fi
 
           # Install and run tests
+          cd client
           npm ci
           npx playwright install
           npx playwright test --reporter=github --reporter=html --project=chromium
