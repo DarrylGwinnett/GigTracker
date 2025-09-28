@@ -16,10 +16,22 @@ jobs:
 
       # --- Build Docker image ---
       - name: Build Docker image
-        run: docker-compose -f docker-compose.yml up --build -d
+        run: docker build -t fullstack-app .
 
-      # --- Run Playwright tests directly in runner ---
-      - name: Run Playwright tests
-        working-directory: ./endToEndTests
+      # --- Run fullstack app container ---
+      - name: Run fullstack app container and test
         run: |
-          npx playwright test
+          docker run -d \
+            --name fullstack-app \
+            -p 8080:8080 \
+            fullstack-app
+
+          # Wait for API + client to be ready
+          npm install -g wait-on
+          if ! wait-on --timeout 30000 http://localhost:8080; then
+            docker logs fullstack-app
+            exit 1
+          npm ci
+          npx playwright install
+          npx playwright test --reporter=github --reporter=html --project=chromium
+          fi
