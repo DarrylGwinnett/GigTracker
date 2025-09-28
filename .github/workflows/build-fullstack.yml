@@ -31,7 +31,9 @@ jobs:
           if ! wait-on --timeout 30000 http://localhost:8080; then
             docker logs fullstack-app
             exit 1
+          fi
+
+          # Install and run tests
           npm ci
           npx playwright install
           npx playwright test --reporter=github --reporter=html --project=chromium
-          fi
