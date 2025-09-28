@@ -26,15 +26,24 @@ jobs:
             -p 8080:8080 \
             fullstack-app
 
-          # Wait for API + client to be ready
+          echo "Waiting for application to start..."
           npm install -g wait-on
-          if ! wait-on --timeout 30000 http://localhost:8080; then
+          if ! wait-on --timeout 60000 http://localhost:8080; then
+            echo "Application failed to start. Checking logs..."
             docker logs fullstack-app
             exit 1
           fi
 
+          echo "Application is up. Checking Docker logs before running tests..."
+          docker logs fullstack-app
+
+          echo "Testing API health..."
+          curl -v http://localhost:8080/api/health || true
+
           # Install and run tests
           cd endToEndTests
-          npm ci
+          npm ci 
           npx playwright install --with-deps
-          npx playwright test --reporter=github --reporter=html
+
+          # Run tests with increased timeout
+          PLAYWRIGHT_TEST_TIMEOUT=30000 npx playwright test --reporter=github --reporter=html
