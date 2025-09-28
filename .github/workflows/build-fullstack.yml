@@ -6,57 +6,52 @@ on:
       - main
 
 jobs:
-jobs:
-  build-image:
+  build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Docker image
+      - name: Start services and test
         run: |
-          docker build -t fullstack-app .
+          # Build all services first
+          docker compose build
 
-  playwright-tests:
-    runs-on: ubuntu-latest
-    needs: build-image
-    steps:
-      - uses: actions/checkout@v4
+          # Start database and wait for it to be ready
+          docker compose up -d db
+          echo "Waiting for database to be ready..."
+          docker compose exec db sh -c 'until pg_isready; do sleep 1; done'
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+          # Now start the app
+          docker compose up -d app
 
-      - name: Install Playwright
-        run: |
-          cd endToEndTests
-          npm ci
-          npx playwright install chromium
+          echo "Waiting for application to start..."
           npm install -g wait-on
-
-      - name: Run Docker container
-        run: |
-          docker run -d --name fullstack-app -p 5000:5000 fullstack-app
-          # Wait for API (and React is served through API)
-          if ! wait-on --timeout 30000 http://localhost:5000; then
-            echo "ERROR: App did not start successfully"
-            docker logs fullstack-app
+          if ! wait-on --timeout 60000 http://localhost:8080; then
+            echo "Application failed to start. Checking logs..."
+            docker compose logs
             exit 1
           fi
-          echo "App is ready!"
 
-      - name: Run Playwright tests
-        run: |
+          echo "Application is up. Checking logs before running tests..."
+          docker compose logs
+
+          echo "Testing API health..."
+          curl -v http://localhost:8080/api/health || true
+
+          # Install and run tests
           cd endToEndTests
-          npx playwright test --reporter=github --reporter=html
+          npm ci 
+          npx playwright install --with-deps
 
-      - name: Upload Playwright HTML Report
+          # Run tests with increased timeout
+          PLAYWRIGHT_TEST_TIMEOUT=30000 npx playwright test --reporter=github --reporter=html
+      - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-html-report
-          path: endToEndTests/playwright-report
-          retention-days: 7
-
-      - name: Stop Docker container
-        run: docker stop fullstack-app
+          name: playwright-report
+          path: endToEndTests/playwright-report/
+          retention-days: 30
