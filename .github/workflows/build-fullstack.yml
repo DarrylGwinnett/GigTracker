@@ -17,8 +17,16 @@ jobs:
       # --- Start services using docker compose ---
       - name: Start services
         run: |
+          # Build all services first
           docker compose build
-          docker compose up -d
+
+          # Start database and wait for it to be ready
+          docker compose up -d db
+          echo "Waiting for database to be ready..."
+          docker compose exec db sh -c 'until pg_isready; do sleep 1; done'
+
+          # Now start the app
+          docker compose up -d app
 
           echo "Waiting for application to start..."
           npm install -g wait-on
