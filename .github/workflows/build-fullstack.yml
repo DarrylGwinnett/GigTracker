@@ -14,30 +14,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # --- Build Docker image ---
-      - name: Build Docker image
-        run: docker build -t fullstack-app .
-
-      # --- Run fullstack app container ---
-      - name: Run fullstack app container and test
+      # --- Start services using docker-compose ---
+      - name: Start services
         run: |
-          docker run -d \
-            --name fullstack-app \
-            -p 8080:8080 \
-            -p 5432:5432 \
-            -e ConnectionStrings__DefaultConnection="Host=localhost;Database=gigtracker;Username=postgres;Password=postgres" \
-            fullstack-app
-
+          docker-compose up -d
+          
           echo "Waiting for application to start..."
           npm install -g wait-on
           if ! wait-on --timeout 60000 http://localhost:8080; then
             echo "Application failed to start. Checking logs..."
-            docker logs fullstack-app
+            docker-compose logs
             exit 1
           fi
 
-          echo "Application is up. Checking Docker logs before running tests..."
-          docker logs fullstack-app
+          echo "Application is up. Checking logs before running tests..."
+          docker-compose logs
 
           echo "Testing API health..."
           curl -v http://localhost:8080/api/health || true
