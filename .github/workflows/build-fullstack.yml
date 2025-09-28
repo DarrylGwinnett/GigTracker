@@ -14,27 +14,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Install Docker Compose
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose-plugin
-
       # --- Start services using docker-compose ---
       - name: Start services
         run: |
+          docker compose build
           docker compose up -d
+
 
           echo "Waiting for application to start..."
           npm install -g wait-on
           if ! wait-on --timeout 60000 http://localhost:8080; then
             echo "Application failed to start. Checking logs..."
-            docker compose logs
+            docker-compose logs
             exit 1
           fi
 
           echo "Application is up. Checking logs before running tests..."
-          docker compose logs
+          docker-compose logs
 
           echo "Testing API health..."
           curl -v http://localhost:8080/api/health || true
