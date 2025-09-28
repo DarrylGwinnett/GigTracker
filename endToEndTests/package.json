@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:local": "cross-env NODE_ENV=local playwright test",
+    "test:cicd": "cross-env NODE_ENV=cicd playwright test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.55.0",
-    "@types/node": "^24.4.0"
+    "@types/node": "^24.4.0",
+    "cross-env": "^10.0.0",
+    "dotenv": "^17.2.2"
   }
 }

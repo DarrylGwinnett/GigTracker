@@ -1,4 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path from 'path';
+
+
+// Load environment variables
+const env = process.env.NODE_ENV || 'local';
+const envPath = path.resolve(__dirname, `.env.${env}`);
+dotenv.config({ path: envPath });
 
 /**
  * Read environment variables from file.
@@ -12,6 +20,8 @@ import { defineConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+
+  
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -26,8 +36,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
-
+    baseURL: process.env.BASE_URL || 'http://localhost:8080',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
@@ -37,7 +46,7 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-    },
+    }/*,
 
     {
       name: 'firefox',
@@ -47,7 +56,7 @@ export default defineConfig({
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
-    },
+    },*/
 
     /* Test against mobile viewports. */
     // {

@@ -1,20 +1,26 @@
-/*import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
-test('create a new gig', async ({ page }) => {
-  // Login first
-  await page.goto('http://host.docker.internal:8080/gigs');
+
+test.describe('Gig creation flow', () => {
+
+
+test.beforeEach(async ({ page }) => {
+  // Set viewport size
+  await page.goto('/gigs');
   await page.getByRole('menuitem', { name: 'Login' }).click();
   await page.getByLabel('Email').fill('bob@myfakedomain.dg');
   await page.getByLabel('Password').fill('Pa$$w0rd');
   await page.getByRole('button', { name: 'Login' }).click();
+});
 
+test('Gig Creation happy path', async ({ page }) => {
   // Open user menu and click Create Gig
   await page.getByTestId('user-menu-button').click();
   await page.getByRole('menuitem', { name: 'Create Gig' }).click();
-  await expect(page).toHaveURL('http://host.docker.internal:8080/createGig');
+  await expect(page).toHaveURL(`/createGig`);
 
   // Fill in the gig form
-  const testGigTitle = `Test Gig ${Date.now()}`;
+  const testGigTitle = `Test Gig End To End Automation ${Date.now()}`;
   await page.getByLabel('Title').fill(testGigTitle);
   await page.getByLabel('Artist').fill('Test Artist');
   await page.getByRole('combobox').click();
@@ -40,4 +46,8 @@ test('create a new gig', async ({ page }) => {
 
   // Verify our new gig appears in the list
   await expect(page.getByText(testGigTitle)).toBeVisible();
-});*/
+});
+
+
+
+});
