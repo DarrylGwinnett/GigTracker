@@ -41,3 +41,12 @@ jobs:
 
           # Run tests with increased timeout
           PLAYWRIGHT_TEST_TIMEOUT=30000 npx playwright test --reporter=github --reporter=html
+
+                # Upload test results
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: endToEndTests/playwright-report/
+          retention-days: 30
