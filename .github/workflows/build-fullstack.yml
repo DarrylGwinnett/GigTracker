@@ -34,7 +34,7 @@ jobs:
           fi
 
           # Install and run tests
-          cd client
+          cd endToEndTests
           npm ci
           npx playwright install --with-deps
-          npx playwright test --reporter=github --reporter=html --project=chromium
+          npx playwright test --reporter=github --reporter=html
