@@ -7,11 +7,11 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Photos
 {
-    public class PhotoService : IPhotoService
+    public class ImageService : IImageService
     {
         private readonly Cloudinary _cloudinary;
 
-        public PhotoService(IOptions<CloudinarySettings> config)
+        public ImageService(IOptions<CloudinarySettings> config)
         {
             var acc = new Account(
                 config.Value.CloudName,
@@ -21,7 +21,7 @@ namespace Infrastructure.Photos
             _cloudinary = new Cloudinary(acc);
         }
 
-        public async Task<string> DeletePhotoAsync(string publicId)
+        public async Task<string> DeleteImageAsync(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);
             var result = await _cloudinary.DestroyAsync(deleteParams);
@@ -29,7 +29,7 @@ namespace Infrastructure.Photos
             return result.Result;
         }
 
-        public async Task<PhotoUploadResult?> UploadPhotoAsync(IFormFile file)
+        public async Task<Application.Profiles.DTO.ImageUploadResult?> UploadImageAsync(IFormFile file)
         {
             if (file.Length == 0) { return null; }
 
@@ -42,7 +42,7 @@ namespace Infrastructure.Photos
             var uploadResult = await _cloudinary.UploadAsync(uploadParams);
             if (uploadResult.Error != null) throw new Exception(uploadResult.Error.Message);
 
-            return new PhotoUploadResult
+            return new Application.Profiles.DTO.ImageUploadResult
             {
                 PublicId = uploadResult.PublicId,
                 Url = uploadResult.SecureUrl.ToString()

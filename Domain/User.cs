@@ -10,5 +10,7 @@ namespace Domain
         public string? ImageUrl { get; set; }
 
         public ICollection<GigAttendee> Gigs { get; set; } = [];
+
+        public ICollection<Image> UserImages { get; set; } = [];
     }
 }

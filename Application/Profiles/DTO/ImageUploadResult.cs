@@ -1,6 +1,6 @@
 ﻿namespace Application.Profiles.DTO
 {
-    public class PhotoUploadResult
+    public class ImageUploadResult
     {
         public required string PublicId { get; set; }
         public required string Url { get; set; }
