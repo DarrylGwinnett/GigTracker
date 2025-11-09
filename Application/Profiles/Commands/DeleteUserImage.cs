@@ -12,7 +12,7 @@ namespace Application.Profiles.Commands
             public required string ImageId { get; set; }
         }
 
-        public class Handler(AppDbContext context, IUserAccessor userAccessor, IImageService imageService) : IRequestHandler<Command, Result<Unit>>>
+        public class Handler(AppDbContext context, IUserAccessor userAccessor, IImageService imageService) : IRequestHandler<Command, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
