@@ -1,4 +1,5 @@
 using API.Middleware;
+using API.SignalR;
 using Application.Core;
 using Application.Gigs.Queries;
 using Application.Interfaces;
@@ -50,6 +51,7 @@ builder.Services.AddIdentityApiEndpoints<Domain.User>(opt =>
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddCors();
+builder.Services.AddSignalR();
 builder.Services.Configure<Infrastructure.Photos.CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 builder.Services.AddAuthorizationBuilder()
@@ -74,6 +76,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000", "https://localhost:3000"));
 app.MapControllers();
 app.MapGroup("api").MapIdentityApi<Domain.User>();
+app.MapHub<CommentHub>("/comments");
 app.UseStaticFiles();
 app.UseDefaultFiles();
 app.MapFallbackToController("Index", "Fallback");
