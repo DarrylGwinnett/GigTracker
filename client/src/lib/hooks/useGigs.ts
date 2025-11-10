@@ -17,10 +17,12 @@ export const useGigs = (id?: string) => {
     enabled: !id && location.pathname === '/gigs' && !!currentUser,
     select: (data) => {
       return data.map((gig) => {
+        const organiser = gig.attendees.find(x => x.id === gig.organiserId)
         return {
           ...gig,
           isOrganiser: currentUser?.id === gig.organiserId,
           isGoing: gig.attendees.some((x) => x.id === currentUser?.id),
+          hostImage: organiser?.imageUrl
         };
       });
     },
@@ -34,10 +36,12 @@ export const useGigs = (id?: string) => {
     },
     enabled: !!id && !!currentUser,
     select: (data) => {
+      const organiser = data.attendees.find(x => x.id === data.organiserId)
       return {
         ...data,
         isOrganiser: currentUser?.id === data.organiserId,
         isGoing: data.attendees.some((x) => x.id === currentUser?.id),
+        hostImage: organiser?.imageUrl
       };
     },
   });

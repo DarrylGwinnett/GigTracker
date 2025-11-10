@@ -16,9 +16,7 @@ export const useAccount = () => {
       return response.data;
     },
     onSuccess: async () => {
-      console.log('reftching query');
       await queryClient.invalidateQueries({ queryKey: ['user'] });
-      console.log('finished query');
     },
   });
 

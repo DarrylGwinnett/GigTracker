@@ -15,6 +15,7 @@ type Gig = {
   isOrganiser: boolean;
   organiserId: string;
   organiserDisplayName: string;
+  hostImage?: string;
 };
 
 type Profile = {
@@ -29,6 +30,11 @@ type User = {
   email: string;
   displayName: string;
   imageUrl?: string;
+};
+
+type Image = {
+  id: string;
+  url: string;
 };
 
 type LocationIqSuggestion = {
