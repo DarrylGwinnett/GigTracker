@@ -22,7 +22,16 @@ jobs:
           # Start database and wait for it to be ready
           docker compose up -d db
           echo "Waiting for database to be ready..."
-          docker compose exec db sh -c 'until pg_isready; do sleep 1; done'
+          for i in {1..30}; do
+            if docker compose run --rm db pg_isready -h db -U postgres; then
+              echo "Database is ready!"
+              break
+            fi
+            echo "db not ready yet..."
+            sleep 2
+          done
+          docker compose ps
+          docker compose logs db
 
           # Now start the app
           docker compose up -d app
