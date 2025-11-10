@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251107205828_FinalisedImageObject")]
-    partial class FinalisedImageObject
+    [Migration("20251110104039_MigrationBaselineFromUploadImage")]
+    partial class MigrationBaselineFromUploadImage
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
