@@ -8,6 +8,7 @@ namespace Persistence
     {
         public required DbSet<Gig> Gigs { get; set; }
         public required DbSet<GigAttendee> GigAttendees { get; set; }
+        public required DbSet<Image> UserImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

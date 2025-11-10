@@ -1,0 +1,53 @@
+﻿using Application.Interfaces;
+using Application.Profiles.DTO;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+
+namespace Infrastructure.Photos
+{
+    public class ImageService : IImageService
+    {
+        private readonly Cloudinary _cloudinary;
+
+        public ImageService(IOptions<CloudinarySettings> config)
+        {
+            var acc = new Account(
+                config.Value.CloudName,
+                config.Value.ApiKey,
+                config.Value.ApiSecret
+            );
+            _cloudinary = new Cloudinary(acc);
+        }
+
+        public async Task<string> DeleteImageAsync(string publicId)
+        {
+            var deleteParams = new DeletionParams(publicId);
+            var result = await _cloudinary.DestroyAsync(deleteParams);
+            if (result.Error != null) throw new Exception(result.Error.Message);
+            return result.Result;
+        }
+
+        public async Task<Application.Profiles.DTO.ImageUploadResult?> UploadImageAsync(IFormFile file)
+        {
+            if (file.Length == 0) { return null; }
+
+            await using var stream = file.OpenReadStream();
+            var uploadParams = new ImageUploadParams
+            {
+                File = new FileDescription(file.FileName, stream),
+                Folder = "GigsApp"
+            };
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+            if (uploadResult.Error != null) throw new Exception(uploadResult.Error.Message);
+
+            return new Application.Profiles.DTO.ImageUploadResult
+            {
+                PublicId = uploadResult.PublicId,
+                Url = uploadResult.SecureUrl.ToString()
+            };
+
+        }
+    }
+}

@@ -1,20 +1,8 @@
-﻿using API;
-using Application.Gigs.DTO;
-using Domain;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
-using NBomber.Contracts;
+﻿using Microsoft.AspNetCore.Mvc.Testing;
 using NBomber.Contracts.Stats;
 using NBomber.CSharp;
 using NUnit.Framework;
 using PerformanceTests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace GigApiLoadTests
 {

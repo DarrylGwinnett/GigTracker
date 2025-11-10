@@ -89,6 +89,30 @@ namespace Persistence.Migrations
                     b.ToTable("GigAttendees");
                 });
 
+            modelBuilder.Entity("Domain.Image", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PublicId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserImages");
+                });
+
             modelBuilder.Entity("Domain.User", b =>
                 {
                     b.Property<string>("Id")
@@ -313,6 +337,17 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Image", b =>
+                {
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("UserImages")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -372,6 +407,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.User", b =>
                 {
                     b.Navigation("Gigs");
+
+                    b.Navigation("UserImages");
                 });
 #pragma warning restore 612, 618
         }

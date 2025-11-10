@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class MigrateToPostgres : Migration
+    public partial class FinalisedImageObject : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -182,6 +182,26 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserImages",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Url = table.Column<string>(type: "text", nullable: false),
+                    PublicId = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserImages_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GigAttendees",
                 columns: table => new
                 {
@@ -248,6 +268,11 @@ namespace Persistence.Migrations
                 name: "IX_GigAttendees_UserId",
                 table: "GigAttendees",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserImages_UserId",
+                table: "UserImages",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -272,13 +297,16 @@ namespace Persistence.Migrations
                 name: "GigAttendees");
 
             migrationBuilder.DropTable(
+                name: "UserImages");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Gigs");
 
             migrationBuilder.DropTable(
-                name: "Gigs");
+                name: "AspNetUsers");
         }
     }
 }

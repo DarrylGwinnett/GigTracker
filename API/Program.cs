@@ -4,6 +4,7 @@ using Application.Gigs.Queries;
 using Application.Interfaces;
 using Application.Users.Commands;
 using FluentValidation;
+using Infrastructure.Photos;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -40,6 +41,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 builder.Services.AddTransient<ExceptionMiddleware>();
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
+builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddIdentityApiEndpoints<Domain.User>(opt =>
 {
     opt.User.RequireUniqueEmail = true;
@@ -48,7 +50,7 @@ builder.Services.AddIdentityApiEndpoints<Domain.User>(opt =>
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddCors();
-
+builder.Services.Configure<Infrastructure.Photos.CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("IsGigOrganiser", policy =>
