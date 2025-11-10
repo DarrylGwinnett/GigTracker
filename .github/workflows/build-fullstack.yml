@@ -30,6 +30,8 @@ jobs:
             echo "db not ready yet..."
             sleep 2
           done
+          docker compose ps
+          docker compose logs db
 
           # Now start the app
           docker compose up -d app
