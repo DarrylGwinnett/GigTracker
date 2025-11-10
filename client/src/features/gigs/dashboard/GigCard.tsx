@@ -34,7 +34,12 @@ export default function GigCard({ gig }: Props) {
         justifyContent={'space-between'}
       >
         <CardHeader
-          avatar={<Avatar sx={{ height: 80, width: 80 }} />}
+          avatar={
+            <Avatar
+              src={gig.hostImage!}
+              sx={{ height: 80, width: 80 }}
+            />
+          }
           title={`${gig.artist} at ${gig.venue}`}
           titleTypographyProps={{ fontWeight: 'bold', fontSize: 20 }}
           subheader={

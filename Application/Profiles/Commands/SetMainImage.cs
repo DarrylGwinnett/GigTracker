@@ -20,7 +20,6 @@ namespace Application.Profiles.Commands
                 var image = context.UserImages.Where(x => x.Id == request.ImageId).Single();
                 if (image.Url == user.ImageUrl) return Result<Unit>.Failure("Image is already main image", 400);
                 user.ImageUrl = image.Url;
-                context.UserImages.Remove(image);
                 var result = await context.SaveChangesAsync(cancellationToken) > 0;
                 return result
                   ? Result<Unit>.Success(Unit.Value)
