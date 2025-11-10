@@ -9,6 +9,8 @@ namespace Domain
 
         public string? ImageUrl { get; set; }
 
+        public int? RandomPropForChange { get; set; }
+
         public ICollection<GigAttendee> Gigs { get; set; } = [];
     }
 }
