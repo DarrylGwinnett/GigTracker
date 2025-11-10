@@ -5,9 +5,6 @@ services:
       POSTGRES_PASSWORD: "Password@1"
     ports:
       - "5432:5432"
-    volumes:
-      - pg-data:/var/lib/postgresql/data
-      
 
   app:
     build:
@@ -15,6 +12,3 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-
-volumes:
-  pg-data:
