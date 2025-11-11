@@ -1,8 +1,8 @@
 ﻿namespace Application.Gigs.DTO
 {
     public class CommentDTO
-    {           
-        public string Id { get; set; } 
+    {
+        public string Id { get; set; } = null!;
 
         public required string Body { get; set; }
 

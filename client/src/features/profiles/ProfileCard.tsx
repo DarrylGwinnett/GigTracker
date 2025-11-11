@@ -15,11 +15,10 @@ type Props = {
 };
 
 export default function ProfileCard({ profile }: Props) {
-  const following = false;
   return (
-    <Link to={`profiles/${profile.id}`} style={{ textDecoration: 'none' }}>
+    <Link to={`/profiles/${profile.id}`} style={{ textDecoration: 'none' }}>
       <Card
-        sx={{ borderRadius: 3, p: 3, maxWidth: 300, textDecoration: 'none' }}
+        sx={{ borderRadius: 3, p: 3, maxWidth: 250, textDecoration: 'none' }}
         elevation={4}
       >
         <CardMedia
@@ -31,7 +30,7 @@ export default function ProfileCard({ profile }: Props) {
         <CardContent>
           <Box display="flex" flexDirection='column' gap={1}>
             <Typography variant="h5">{profile.displayName}</Typography>
-            {following && (
+            {profile.following && (
               <Chip
                 size="small"
                 label="following"
@@ -49,7 +48,7 @@ export default function ProfileCard({ profile }: Props) {
           justifyContent={'start'}
         >
           <Person />
-          <Typography sx={{ ml: 1 }}>20 followers</Typography>
+          <Typography sx={{ ml: 1 }}>{profile.followersCount} followers</Typography>
         </Box>
       </Card>
     </Link>
