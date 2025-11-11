@@ -25,5 +25,7 @@
         public double Longitude { get; set; }
 
         public ICollection<GigAttendee> Attendees { get; set; } = [];
+
+        public ICollection<Comment> Comments { get; set; } = [];
     }
 }

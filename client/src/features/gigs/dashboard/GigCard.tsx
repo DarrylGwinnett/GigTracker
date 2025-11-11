@@ -51,7 +51,7 @@ export default function GigCard({ gig }: Props) {
             </>
           }
         />
-        <Box display="flex" flexDirection={'column'} gap={2} mr={2}>
+        <Box display="flex" flexDirection={'column'} gap={2} mr={2} p={1}>
           {(gig.isOrganiser || gig.isGoing) && (
             <Chip label={label} color={color} sx={{ borderRadius: 2 }} />
           )}
@@ -93,7 +93,6 @@ export default function GigCard({ gig }: Props) {
           size="medium"
           variant="contained"
           sx={{
-            display: 'flex',
             justifySelf: 'self-end',
             mt: 2,
             borderRadius: 3,
