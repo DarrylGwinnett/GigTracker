@@ -93,7 +93,6 @@ export default function GigCard({ gig }: Props) {
           size="medium"
           variant="contained"
           sx={{
-            display: 'flex',
             justifySelf: 'self-end',
             mt: 2,
             borderRadius: 3,

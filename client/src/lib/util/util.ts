@@ -1,6 +1,9 @@
-import { type DateArg, format } from "date-fns";
+import { type DateArg, format, formatDistanceToNow } from 'date-fns';
 
 export function formatDate(date: DateArg<Date>) {
-   return format(date, "dd MMM yyyy hh:mm a")
+  return format(date, 'dd MMM yyyy hh:mm a');
 }
 
+export function timeAgo(date: DateArg<Date>) {
+  return formatDistanceToNow(date) + ' ago';
+}
