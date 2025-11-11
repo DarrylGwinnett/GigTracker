@@ -12,5 +12,9 @@ namespace Domain
         public ICollection<GigAttendee> Gigs { get; set; } = [];
 
         public ICollection<Image> UserImages { get; set; } = [];
+
+        public ICollection<UserFollowing> Followings { get; set; } = [];
+
+        public ICollection<UserFollowing> Followers { get; set; } = [];
     }
 }

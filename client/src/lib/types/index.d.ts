@@ -23,6 +23,9 @@ type Profile = {
   displayName: string;
   bio?: string;
   imageUrl?: string;
+  following?: boolean;
+  followersCount?: number;
+  followingCount?: number;
 };
 
 type User = {
@@ -66,8 +69,8 @@ type LocationIqAddress = {
 type ChatComment = {
   id: string;
   createdAt: Date;
-  body: string
-  userId: string
-  displayName: string
-  imageUrl?: string
+  body: string;
+  userId: string;
+  displayName: string;
+  imageUrl?: string;
 };

@@ -25,6 +25,10 @@ export default function AvatarPopover({ profile }: Props) {
   return (
     <>
       <Avatar
+        sx={{
+          border: profile.following ? 3 : 0,
+          borderColor: 'secondary.main',
+        }}
         alt={profile.displayName + ' image'}
         src={profile.imageUrl}
         component={Link}
