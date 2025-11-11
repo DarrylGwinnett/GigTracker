@@ -10,7 +10,7 @@ namespace API.SignalR
         public override async Task OnConnectedAsync()
         {
             var context = Context.GetHttpContext();
-            var gigId = context?.Request.Query["id"];
+            var gigId = context?.Request.Query["gigId"];
             if (string.IsNullOrEmpty(gigId)) throw new HubException("No gig with this id");
             await Groups.AddToGroupAsync(Context.ConnectionId, gigId!);
             var result = await mediator.Send(new GetComments.Query { GigId= gigId! });
