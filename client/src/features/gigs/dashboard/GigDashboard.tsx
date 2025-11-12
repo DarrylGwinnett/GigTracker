@@ -18,7 +18,10 @@ export default function GigDashboard() {
           Get More Gigs
         </Button>
       </Grid2>
-      <Grid2 size={4}>
+      <Grid2
+        size={4}
+        sx={{ position: 'sticky', top: 112, alignSelf: 'flex-start' }}
+      >
         <GigFilters />
       </Grid2>
     </Grid2>
