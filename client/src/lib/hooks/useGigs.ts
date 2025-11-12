@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import agent from '../api/agent';
 import { useLocation } from 'react-router';
 import { useAccount } from './useAccount';
@@ -8,24 +13,39 @@ export const useGigs = (id?: string) => {
   const location = useLocation();
   const { currentUser } = useAccount();
 
-  const { data: gigs, isLoading } = useQuery({
+  const {
+    data: gigsGroup,
+    isLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery<PagedList<Gig, string>>({
     queryKey: ['gigs'],
-    queryFn: async () => {
-      const response = await agent.get<Gig[]>('/gigs');
+    queryFn: async ({ pageParam = null }) => {
+      const response = await agent.get<PagedList<Gig, string>>('/gigs', {
+        params: { cursor: pageParam },
+      });
       return response.data;
     },
+    initialPageParam: null,
+    staleTime: 1000 * 60 * 5,
+    getNextPageParam: (lastpage) => lastpage.nextCursor,
     enabled: !id && location.pathname === '/gigs' && !!currentUser,
-    select: (data) => {
-      return data.map((gig) => {
-        const organiser = gig.attendees.find(x => x.id === gig.organiserId)
-        return {
-          ...gig,
-          isOrganiser: currentUser?.id === gig.organiserId,
-          isGoing: gig.attendees.some((x) => x.id === currentUser?.id),
-          hostImage: organiser?.imageUrl
-        };
-      });
-    },
+    select: (data) => ({
+      ...data,
+      pages: data.pages.map((page) => ({
+        ...page,
+        items: page.items.map((gig) => {
+          const organiser = gig.attendees.find((x) => x.id === gig.organiserId);
+          return {
+            ...gig,
+            isOrganiser: currentUser?.id === gig.organiserId,
+            isGoing: gig.attendees.some((x) => x.id === currentUser?.id),
+            hostImage: organiser?.imageUrl,
+          };
+        }),
+      })),
+    }),
   });
 
   const { data: gig, isLoading: isLoadingGig } = useQuery({
@@ -36,12 +56,12 @@ export const useGigs = (id?: string) => {
     },
     enabled: !!id && !!currentUser,
     select: (data) => {
-      const organiser = data.attendees.find(x => x.id === data.organiserId)
+      const organiser = data.attendees.find((x) => x.id === data.organiserId);
       return {
         ...data,
         isOrganiser: currentUser?.id === data.organiserId,
         isGoing: data.attendees.some((x) => x.id === currentUser?.id),
-        hostImage: organiser?.imageUrl
+        hostImage: organiser?.imageUrl,
       };
     },
   });
@@ -126,11 +146,14 @@ export const useGigs = (id?: string) => {
   return {
     gig,
     isLoadingGig,
-    gigs,
+    gigsGroup,
     isLoading,
     updateGig,
     createGig,
     deleteGig,
     updateAttendance,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
   };
 };

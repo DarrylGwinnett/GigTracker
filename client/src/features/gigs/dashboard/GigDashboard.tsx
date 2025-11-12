@@ -8,7 +8,10 @@ export default function GigDashboard() {
       <Grid2 size={8}>
         <GigList />
       </Grid2>
-      <Grid2 size={4}>
+      <Grid2
+        size={4}
+        sx={{ position: 'sticky', top: 112, alignSelf: 'flex-start' }}
+      >
         <GigFilters />
       </Grid2>
     </Grid2>

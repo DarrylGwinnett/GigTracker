@@ -74,3 +74,9 @@ type ChatComment = {
   displayName: string;
   imageUrl?: string;
 };
+
+
+type PagedList<T, TCursor> = {
+   items: T[];
+   nextCursor: TCursor;
+}
