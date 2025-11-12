@@ -1,69 +1,54 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../pageObjects/loginPage';
+import { NavBar } from '../../pageObjects/navBar';
+import { GigForm } from '../../pageObjects/gigForm';
+import { GigDetailsPage } from '../../pageObjects/gigDetailsPage';
+import { GigDashboard } from '../../pageObjects/gigDashboard';
 
-test.describe('Gig creation flow', () => {
+test.describe('Gig update flow', () => {
   test.beforeEach(async ({ page }) => {
-    // Set viewport size
-    await page.goto('/gigs');
-    await page.getByRole('menuitem', { name: 'Login' }).click();
-    await page.getByLabel('Email').fill('bob@myfakedomain.dg');
-    await page.getByLabel('Password').fill('Pa$$w0rd');
-    await page.getByRole('button', { name: 'Login' }).click();
+    let loginPage = new LoginPage(page);
+    await loginPage.login();
   });
 
   test('Gig Edit happy path', async ({ page }) => {
-    // Open user menu and click Create Gig
-    await page
-      .locator('.MuiPaper-root')
-      .filter({ hasText: 'Hosted by Bob' })
-      .locator('.MuiButtonBase-root.MuiButton-root.MuiButton-contained')
-      .first()
-      .click();
-    await page.getByRole('link', { name: 'Manage Event' }).click();
-    await expect(page.getByRole('heading', { name: 'Edit Gig' })).toBeVisible();
-    let description = await page.getByLabel('Description').inputValue();
+    let gigDashboard = new GigDashboard(page);
+    let gigDetailsPage = new GigDetailsPage(page);
+    let gigForm = new GigForm(page);
+    await gigDashboard.findEventByOrganiser('Bob');
+    await gigDetailsPage.getManageEvent().click();
+    expect(await gigForm.getHeadingText()).toEqual('Edit Gig');
+    let description = await gigForm.getDescription();
     description = description + ' - updated';
-    await page.getByLabel('Description').fill(description);
-    await page.getByRole('button', { name: 'Submit' }).click();
-    await expect(page.getByText(description)).toBeVisible();
+    await gigForm.fillDescription(description);
+    await gigForm.clickSubmit();
+    expect(await gigDetailsPage.getBodyDescriptionText()).toEqual(description);
   });
 
   test('Can only edit own gigs', async ({ page }) => {
-    // Open user menu and click Create Gig
-    await page
-      .locator('.MuiPaper-root')
-      .filter({ hasText: 'Hosted by Tim' })
-      .locator('.MuiButtonBase-root.MuiButton-root.MuiButton-contained')
-      .first()
-      .click();
-    await expect(
-      page.getByRole('link', { name: 'Manage Event' })
-    ).not.toBeVisible();
+    let gigDetailsPage = new GigDetailsPage(page);
+    let gigDashboard = new GigDashboard(page);
+    await gigDashboard.findEventByOrganiser('Tim');
+    await expect(gigDetailsPage.getManageEvent()).not.toBeVisible();
   });
 
   test('Gig can be cancelled', async ({ page }) => {
-    // Open user menu and click Create Gig
-    await page
-      .locator('.MuiPaper-root')
-      .filter({ hasText: 'Hosted by Bob' })
-      .locator('.MuiButtonBase-root.MuiButton-root.MuiButton-contained')
-      .first()
-      .click();
-    await page.getByRole('button', { name: 'Cancel Gig' }).click();
-    await expect(
-      page.getByRole('button', { name: 'Re-Activate Gig' })
-    ).toBeVisible();
-    await expect(
-      page.getByRole('link', { name: 'Manage Event' })
-    ).toBeDisabled();
-    await expect(page.getByText('Cancelled')).toBeVisible();
+    let gigDashboard = new GigDashboard(page);
+    let gigDetailsPage = new GigDetailsPage(page);
+    let gigForm = new GigForm(page);
+    await gigDashboard.findEventByOrganiser('Bob');
+    await gigDetailsPage.getToggleActiveStatusButton().click();
+    expect(
+      await gigDetailsPage.getToggleActiveStatusButton().textContent()
+    ).toEqual('Re-activate Gig');
+    await expect(gigDetailsPage.getManageEvent()).toBeDisabled();
+    await expect(gigDetailsPage.getCancelledChip()).toBeVisible();
 
-    await page.getByRole('button', { name: 'Re-Activate Gig' }).click();
+    await gigDetailsPage.getToggleActiveStatusButton().click();
 
-    await expect(
-      page.getByRole('link', { name: 'Manage Event' })
-    ).toBeEnabled();
-    await expect(
-      page.getByRole('button', { name: 'Cancel Gig' })
-    ).toBeVisible();
+    await expect(gigDetailsPage.getManageEvent()).toBeEnabled();
+    expect(
+      await gigDetailsPage.getToggleActiveStatusButton().textContent()
+    ).toEqual('Cancel Gig');
   });
 });
