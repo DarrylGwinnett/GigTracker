@@ -12,8 +12,9 @@ namespace API.Controllers
     public class GigsController() : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<PagedList<GigDto, DateTime?>>> GetGigs(DateTime? cursor) {
-            return HandleResult(await Mediator.Send(new GetGigList.Query { Cursor = cursor }));
+        public async Task<ActionResult<PagedList<GigDto, DateTime?>>> GetGigs([FromQuery] GigParams gigParams)
+        {
+            return HandleResult(await Mediator.Send(new GetGigList.Query { GigParams = gigParams }));
         }
 
         [HttpGet("{id}")]
@@ -41,7 +42,7 @@ namespace API.Controllers
         public async Task<ActionResult<Result<Unit>>> DeleteGigAsync(string id)
         {
             return HandleResult(await Mediator.Send(new DeleteGig.Command { Id = id }));
-            
+
         }
 
         [HttpPost("{id}/attend")]

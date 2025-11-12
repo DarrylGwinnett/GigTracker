@@ -3,8 +3,9 @@ import GigCard from './GigCard';
 import { useGigs } from '../../../lib/hooks/useGigs';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 
-export default function GigList() {
+const GigList = observer(function GigList() {
   const { gigsGroup, isLoading, hasNextPage, fetchNextPage } = useGigs();
   const { ref, inView } = useInView({ threshold: 0.5 });
 
@@ -38,4 +39,6 @@ export default function GigList() {
       ))}
     </Box>
   );
-}
+})
+
+export default GigList;

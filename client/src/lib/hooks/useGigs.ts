@@ -1,4 +1,5 @@
 import {
+  keepPreviousData,
   useInfiniteQuery,
   useMutation,
   useQuery,
@@ -7,9 +8,13 @@ import {
 import agent from '../api/agent';
 import { useLocation } from 'react-router';
 import { useAccount } from './useAccount';
+import { useStore } from './useStore';
 
 export const useGigs = (id?: string) => {
   const queryClient = useQueryClient();
+  const {
+    gigStore: { filter, startDate },
+  } = useStore();
   const location = useLocation();
   const { currentUser } = useAccount();
 
@@ -20,15 +25,16 @@ export const useGigs = (id?: string) => {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery<PagedList<Gig, string>>({
-    queryKey: ['gigs'],
+    queryKey: ['gigs', filter, startDate],
     queryFn: async ({ pageParam = null }) => {
       const response = await agent.get<PagedList<Gig, string>>('/gigs', {
-        params: { cursor: pageParam },
+        params: { cursor: pageParam, filter, startDate },
       });
       return response.data;
     },
     initialPageParam: null,
     staleTime: 1000 * 60 * 5,
+    placeholderData: keepPreviousData,
     getNextPageParam: (lastpage) => lastpage.nextCursor,
     enabled: !id && location.pathname === '/gigs' && !!currentUser,
     select: (data) => ({
