@@ -12,8 +12,8 @@ namespace API.Controllers
     public class GigsController() : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<List<GigDto>>> GetGigs() {
-            return HandleResult(await Mediator.Send(new GetGigList.Query()));
+        public async Task<ActionResult<PagedList<GigDto, DateTime?>>> GetGigs(DateTime? cursor) {
+            return HandleResult(await Mediator.Send(new GetGigList.Query { Cursor = cursor }));
         }
 
         [HttpGet("{id}")]
