@@ -1,4 +1,4 @@
-import { Card, CardMedia, Box, Typography, Chip} from '@mui/material';
+import { Card, CardMedia, Box, Typography, Chip } from '@mui/material';
 import { Link } from 'react-router';
 import { formatDate } from '../../../lib/util/util';
 import { useGigs } from '../../../lib/hooks/useGigs';
@@ -21,9 +21,16 @@ export default function GigDetailsHeader({ gig }: Props) {
     >
       {gig.isCancelled && (
         <Chip
-          sx={{ position: 'absolute', left: 40, top: 20, zIndex: 1000, borderRadius: 1 }}
+          sx={{
+            position: 'absolute',
+            left: 40,
+            top: 20,
+            zIndex: 1000,
+            borderRadius: 1,
+          }}
           color="error"
           label="Cancelled"
+          data-testid="gigDetailsHeader-CancelledChip"
         />
       )}
       <CardMedia
@@ -49,14 +56,18 @@ export default function GigDetailsHeader({ gig }: Props) {
       >
         {/* Text Section */}
         <Box>
-          <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
+          <Typography
+            variant="h3"
+            sx={{ fontWeight: 'bold' }}
+            data-testid="gigDetailsHeader-Artist"
+          >
             {gig.artist} in {gig.city}
           </Typography>
-          <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+          <Typography variant="h4" sx={{ fontWeight: 'bold' }} data-testid="gigDetailsHeader-title">
             {gig.title}
           </Typography>
-          <Typography variant="subtitle1">{formatDate(gig.date)}</Typography>
-          <Typography variant="subtitle2">
+          <Typography variant="subtitle1" data-testid="gigDetailsHeader-Date">{formatDate(gig.date)}</Typography>
+          <Typography variant="subtitle2" data-testid="gigDetailsHeader-Host">
             Hosted by{' '}
             <Link
               to={`/profiles/${gig.organiserId}`}
@@ -77,6 +88,7 @@ export default function GigDetailsHeader({ gig }: Props) {
                 onClick={() => updateAttendance.mutate(gig.id)}
                 disabled={updateAttendance.isPending}
                 sx={{ whiteSpace: 'nowrap', mx: 2 }}
+                data-testid="gigDetailsHeader-ToggleActiveStatusButton"
               >
                 {gig.isCancelled ? 'Re-activate Gig' : 'Cancel Gig'}
               </StyledButton>
@@ -87,6 +99,7 @@ export default function GigDetailsHeader({ gig }: Props) {
                 component={Link}
                 to={`/manage/${gig.id}`}
                 disabled={gig.isCancelled}
+                data-testid="gigDetailsHeader-ManageEventButton"
               >
                 Manage Event
               </StyledButton>

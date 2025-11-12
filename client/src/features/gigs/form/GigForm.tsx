@@ -41,12 +41,9 @@ export default function GigForm() {
     };
     try {
       if (gig) {
-        updateGig.mutate(
-          { ...gig, ...flattenedData } as Gig,
-          {
-            onSuccess: () => navigate(`/gigs/${gig.id}`),
-          }
-        );
+        updateGig.mutate({ ...gig, ...flattenedData } as Gig, {
+          onSuccess: () => navigate(`/gigs/${gig.id}`),
+        });
       } else {
         createGig.mutate(flattenedData as unknown as Gig, {
           onSuccess: (id) => navigate(`/gigs/${id}`),
@@ -60,7 +57,12 @@ export default function GigForm() {
   if (isLoadingGig) return <Typography>Loading gig...</Typography>;
   return (
     <Paper sx={{ borderRadius: 3, padding: 3 }}>
-      <Typography variant="h5" gutterBottom color="primary">
+      <Typography
+        variant="h5"
+        gutterBottom
+        color="primary"
+        data-testid="gigForm-Header"
+      >
         {gig ? 'Edit Gig' : 'Create Gig'}
       </Typography>
       <Box

@@ -18,7 +18,9 @@ export default function GigDetailsInfo({ gig }: Props) {
           <Info color="info" fontSize="large" />
         </Grid2>
         <Grid2 size={11}>
-          <Typography>{gig.description}</Typography>
+          <Typography data-testid="gigDetailsBody-Description">
+            {gig.description}
+          </Typography>
         </Grid2>
       </Grid2>
       <Divider />
@@ -27,7 +29,9 @@ export default function GigDetailsInfo({ gig }: Props) {
           <CalendarToday color="info" fontSize="large" />
         </Grid2>
         <Grid2 size={11}>
-          <Typography>{formatDate(gig.date)}</Typography>
+          <Typography data-testid="gigDetailsBody-Date">
+            {formatDate(gig.date)}
+          </Typography>
         </Grid2>
       </Grid2>
       <Divider />
@@ -42,10 +46,11 @@ export default function GigDetailsInfo({ gig }: Props) {
           justifyContent={'space-between'}
           alignItems={'centre'}
         >
-          <Typography>
+          <Typography data-testid="gigDetailsBody-Venue">
             {gig.venue}, {gig.city}
           </Typography>
           <Button
+            data-testid="gigDetailsBody-MapButton"
             sx={{ whiteSpace: 'nowrap', mx: 2 }}
             onClick={() => setMapOpen(!mapOpen)}
           >
