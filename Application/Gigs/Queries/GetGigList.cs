@@ -12,17 +12,9 @@ namespace Application.Gigs.Queries;
 public class GetGigList
 {
 
-    private const int MaxPageSize = 50;
     public class Query : IRequest<Result<PagedList<GigDto, DateTime?>>>
     {
-
-        public DateTime? Cursor;
-        private int _pageSize = 5;
-        public int PageSize
-        {
-            get => _pageSize;
-            set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
-        }
+        public required GigParams GigParams { get; set; }
     }
 
     public class Handler(AppDbContext context, IMapper mapper, IUserAccessor userAccessor) : IRequestHandler<Query, Result<PagedList<GigDto, DateTime?>>>
@@ -31,17 +23,27 @@ public class GetGigList
         {
             var query = context.Gigs
                 .OrderBy(x => x.Date)
+                .Where(x => x.Date >= (request.GigParams.Cursor ?? request.GigParams.StartDate))
                 .AsQueryable();
-            if (request.Cursor.HasValue)
+
+            if (!string.IsNullOrEmpty(request.GigParams.Filter))
             {
-                query = query.Where(x => x.Date >= request.Cursor.Value);
+                query = request.GigParams.Filter switch
+                {
+                    "isGoing" => query.Where(x => x.Attendees.Any(a => a.UserId == userAccessor.GetUserId())),
+                    "isHost" => query.Where(x => x.Attendees.Any(a => a.IsOrganiser && a.UserId == userAccessor.GetUserId())),
+                    _ => query
+                };
             }
-            var gigs = await query
-                .Take(request.PageSize + 1)
-                .ProjectTo<GigDto>(mapper.ConfigurationProvider, new { currentUserId = userAccessor.GetUserId() })
+
+            var projectedGigs = query.ProjectTo<GigDto>(mapper.ConfigurationProvider, new { currentUserId = userAccessor.GetUserId() });
+
+            var gigs = await projectedGigs
+                .Take(request.GigParams.PageSize + 1)
                 .ToListAsync(cancellationToken);
+
             DateTime? nextCursor = null;
-            if (gigs.Count > request.PageSize)
+            if (gigs.Count > request.GigParams.PageSize)
             {
                 nextCursor = gigs.Last().Date;
                 gigs.RemoveAt(gigs.Count - 1);
