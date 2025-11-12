@@ -13,7 +13,13 @@ export const useGigs = (id?: string) => {
   const location = useLocation();
   const { currentUser } = useAccount();
 
-  const { data: gigsGroup, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery<PagedList<Gig, string>>({
+  const {
+    data: gigsGroup,
+    isLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery<PagedList<Gig, string>>({
     queryKey: ['gigs'],
     queryFn: async ({ pageParam = null }) => {
       const response = await agent.get<PagedList<Gig, string>>('/gigs', {
@@ -22,6 +28,7 @@ export const useGigs = (id?: string) => {
       return response.data;
     },
     initialPageParam: null,
+    staleTime: 1000 * 60 * 5,
     getNextPageParam: (lastpage) => lastpage.nextCursor,
     enabled: !id && location.pathname === '/gigs' && !!currentUser,
     select: (data) => ({
@@ -147,6 +154,6 @@ export const useGigs = (id?: string) => {
     updateAttendance,
     isFetchingNextPage,
     fetchNextPage,
-    hasNextPage
+    hasNextPage,
   };
 };
