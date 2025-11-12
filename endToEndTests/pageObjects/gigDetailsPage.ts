@@ -10,10 +10,10 @@ export class GigDetailsPage {
   getHeaderTitle() {
     return this.page.getByTestId('gigDetailsHeader-Date');
   }
-  async getBodyDescriptionText() {
-    return await this.page
+  getBodyDescriptionText() {
+    return this.page
       .getByTestId('gigDetailsBody-Description')
-      .textContent();
+      ;
   }
   getHeaderArtist() {
     return this.page.getByTestId('gigDetailsHeader-Artist');

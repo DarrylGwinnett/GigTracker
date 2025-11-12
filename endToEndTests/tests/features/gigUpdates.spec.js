@@ -17,12 +17,14 @@ test.describe('Gig update flow', () => {
     let gigForm = new GigForm(page);
     await gigDashboard.findEventByOrganiser('Bob');
     await gigDetailsPage.getManageEvent().click();
-    expect(await gigForm.getHeadingText()).toEqual('Edit Gig');
-    let description = await gigForm.getDescription();
+    await expect(gigForm.getHeading()).toHaveText('Edit Gig');
+    let description = await gigForm.getDescription().getT;
     description = description + ' - updated';
     await gigForm.fillDescription(description);
     await gigForm.clickSubmit();
-    expect(await gigDetailsPage.getBodyDescriptionText()).toEqual(description);
+    await expect(gigDetailsPage.getBodyDescriptionText()).toHaveText(
+      description
+    );
   });
 
   test('Can only edit own gigs', async ({ page }) => {
@@ -38,17 +40,17 @@ test.describe('Gig update flow', () => {
     let gigForm = new GigForm(page);
     await gigDashboard.findEventByOrganiser('Bob');
     await gigDetailsPage.getToggleActiveStatusButton().click();
-    expect(
-      await gigDetailsPage.getToggleActiveStatusButton().textContent()
-    ).toEqual('Re-activate Gig');
+    await expect(gigDetailsPage.getToggleActiveStatusButton()).toHaveText(
+      'Re-activate Gig'
+    );
     await expect(gigDetailsPage.getManageEvent()).toBeDisabled();
     await expect(gigDetailsPage.getCancelledChip()).toBeVisible();
 
     await gigDetailsPage.getToggleActiveStatusButton().click();
 
     await expect(gigDetailsPage.getManageEvent()).toBeEnabled();
-    expect(
-      await gigDetailsPage.getToggleActiveStatusButton().textContent()
-    ).toEqual('Cancel Gig');
+    await expect(gigDetailsPage.getToggleActiveStatusButton()).toHaveText(
+      'Cancel Gig'
+    );
   });
 });

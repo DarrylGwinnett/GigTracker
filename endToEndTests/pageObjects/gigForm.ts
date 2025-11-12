@@ -47,12 +47,12 @@ export class GigForm {
     await this.page.getByRole('button', { name: 'Submit' }).click();
   }
 
-  async getHeadingText() {
-    return await this.page.getByTestId('gigForm-Header').textContent();
+  getHeading() {
+    return this.page.getByTestId('gigForm-Header');
   }
 
-  async getDescription() {
-    return await this.page.getByLabel('Description').textContent();
+  getDescription() {
+    return this.page.getByLabel('Description');
   }
 
   async selectDateTime(date: Date) {
